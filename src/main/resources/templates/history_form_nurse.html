@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New History Sick</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+</head>
+<body>
+<div><h2>Patient</h2></div>
+<table class="table table-bordered">
+    <thead class="thead-dark">
+    <tr>
+        <th>Id</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Age</th>
+    </tr>
+    </thead>
+    <tbody>
+    <td th:text="${user.id}"></td>
+    <td th:text="${user.firstName}"></td>
+    <td th:text="${user.lastName}"></td>
+    <td th:text="${user.age}"></td>
+    </tr>
+    </tbody>
+</table>
+
+
+<div class="container text-center">
+    <div th:if="${history.id == null}"><h1>Create New History sick</h1></div>
+    <div th:unless="${history.id == null}"><h1>Edit History sick</h1></div>
+    <form th:action="@{'/nurse/history/save/'+${user.id}}" th:object="${history}" method="post"
+            style="max-width: 600px; margin: 0 auto";>
+        <input type="hidden" th:field="*{id}" th:value="${history.id}"/>
+
+        <div class="m-3">
+
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4">Name of services </label>
+                <div class="col-sm-8">
+                   <select th:field="*{type}" class="form-control" required>
+                       <th:block th:unless="${history.id == null}" th:each="typ : ${listTypes}">
+                           <option th:text="${typ.name}" th:value="${typ.id}"/>
+                       </th:block>
+                       <th:block th:if="${history.id == null}" th:each="typ : ${listTypes}">
+                           <option th:text="${typ.name}" th:value="${typ.id}"/>
+                       </th:block>
+
+                   </select>
+                </div>
+            </div>
+
+
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-4">Date of services: </label>
+                    <div class="col-sm-8">
+                        <input type="date" th:field="*{dateOfAction}" class="form-control" required />
+                    </div>
+                </div>
+
+
+            <th:block th:unless="${history.id == null}" th:each="detail, status : ${history.analysisResults}">
+
+                <input type = "hidden" name="detailID" th:value="${detail.id}" />
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-4">Result of analysis </label>
+                    <div class="col-sm-4">
+                        <input type="text" name="detailName" th:value="${detail.name}" class="form-control" required />
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="text" name="detailValue"  th:value="${detail.value}" class="form-control" required />
+                    </div>
+                </div>
+
+            </th:block>
+
+            <th:block th:if="${history.id == null}">
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4">Result of analysis </label>
+                <div class="col-sm-4">
+                    <input type="text" name="detailName" placeholder="Name" class="form-control" required />
+                </div>
+                <div class="col-sm-4">
+                    <input type="text" name="detailValue" placeholder="Value" class="form-control" required />
+                </div>
+            </div>
+
+            </th:block>
+
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-4">Diagnosis: </label>
+                    <div class="col-sm-8">
+                        <input type="text" th:field="*{diagnosis}" class="form-control" required />
+                    </div>
+                </div>
+
+            <div class="text-center p-3">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+
+</body>
+</html>

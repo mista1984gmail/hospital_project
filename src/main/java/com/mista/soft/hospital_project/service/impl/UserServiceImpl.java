@@ -60,6 +60,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void update(User user) {
+        user.setRoles(Collections.singleton(new Role(1, "ROLE_USER")));
+        userRepository.save(user);
+    }
+
+    @Override
     public boolean deleteUser(Integer id) {
         if (userRepository.findById(id).isPresent()) {
             userRepository.deleteById(id);

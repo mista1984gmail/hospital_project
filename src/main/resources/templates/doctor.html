@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Nurse page</title>
+    <title>Doctor page</title>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
 </head>
 <body>
@@ -18,12 +18,12 @@
 </div>
 
 <div class="container text-center">
-    <div><h1>Welcome to Nurse App</h1></div>
+    <div><h1>Welcome to Doctor App</h1></div>
     <div>
         <div class="p-2">
-            <a class="h2" th:href="@{/nurse/categories}">List of medical services by category</a>
+            <a class="h2" th:href="@{/doctor/patients}">List of patients</a>
         </div>
-        <div class="p-2">
+        <!--<div class="p-2">
             <a class="h2" th:href="@{/nurse/category/new}">Create a medical category</a>
         </div>
 
@@ -32,10 +32,7 @@
         </div>
         <div class="p-2">
             <a class="h2" th:href="@{/nurse/types/new}">Create a medical service</a>
-        </div>
-        <div class="p-2">
-            <a class="h2" th:href="@{/nurse/patients}">List of patients</a>
-        </div>
+        </div>-->
 
 
     </div>

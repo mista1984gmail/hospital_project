@@ -40,7 +40,7 @@ public class HomeController {
             response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/admin"));
         }
         else if(role.contains("ROLE_USER")) {
-            response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/user/"+id));
+            response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/user/history/"+id));
         }
         else if(role.contains("ROLE_DOCTOR")){
             response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/doctor"));
@@ -51,8 +51,4 @@ public class HomeController {
 
     }
 
-    @RequestMapping(value = "/nurse", method = RequestMethod.GET)
-    public String nursePage(Model model) {
-        return "nurse";
-    }
 }

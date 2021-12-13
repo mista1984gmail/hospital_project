@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Patients</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+</head>
+<body>
+<div th:switch="${patientsList}">
+    <h2 th:case="null">No users found!</h2>
+    <div th:case="*">
+        <div><h2 class="text-center">Patients</h2></div>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Date of birthday</th>
+                <th>Age</th>
+                <th>Address</th>
+                <th>email</th>
+                <th>Telephone</th>
+                <th>History sick</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="patient : ${patientsList}">
+                <td th:text="${patient.id}"></td>
+                <td th:text="${patient.firstName}"></td>
+                <td th:text="${patient.lastName}"></td>
+                <td th:text="${patient.birthday}"></td>
+                <td th:text="${patient.age}"></td>
+                <td th:text="${patient.address}"></td>
+                <td th:text="${patient.email}"></td>
+                <td th:text="${patient.telephone}"></td>
+                <td><a th:href="@{/nurse/history/{id}(id=${patient.id})}">History sick</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p><a class="h2" href="/nurse">Back to nurse page</a></p>
+
+</div>
+</body>
+</html>

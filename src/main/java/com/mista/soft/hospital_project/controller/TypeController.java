@@ -1,6 +1,8 @@
 package com.mista.soft.hospital_project.controller;
 
+import com.mista.soft.hospital_project.model.entity.Category;
 import com.mista.soft.hospital_project.model.entity.Type;
+import com.mista.soft.hospital_project.service.impl.CategoryServiceImpl;
 import com.mista.soft.hospital_project.service.impl.TypeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,8 @@ import java.util.List;
 public class TypeController {
     @Autowired
     private TypeServiceImpl typeService;
+    @Autowired
+    private CategoryServiceImpl categoryService;
 
     @GetMapping("/nurse/types")
     public String listTypes(Model model){
@@ -23,8 +27,10 @@ public class TypeController {
     }
     @GetMapping("/nurse/types/new")
     public String showTypeNewForm(Model model){
-
+        List<Category> listCategories = categoryService.findAll();
+        model.addAttribute("listCategories", listCategories);
         model.addAttribute("type", new Type());
+
         return "type_form";
     }
 

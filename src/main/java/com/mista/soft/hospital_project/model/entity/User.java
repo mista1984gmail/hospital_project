@@ -75,6 +75,9 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE)
+    private List<HistorySick> historySicks = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
@@ -103,5 +106,9 @@ public class User implements UserDetails {
     public Integer getAge() {
 
         return Period.between(this.birthday,LocalDate.now()).getYears();
+    }
+
+    public void addHistory(HistorySick historySick){
+        historySicks.add(historySick);
     }
 }

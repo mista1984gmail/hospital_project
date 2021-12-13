@@ -45,5 +45,28 @@ create table hospital_test4.type
     CONSTRAINT fk_category FOREIGN KEY (category_id)
         REFERENCES category(id)
 );
+create table hospital_test4.history_sick
+(
+    id             bigint primary key auto_increment,
+    diagnosis      varchar(255),
+    value          varchar(255),
+    date_of_action date,
+    type_id        bigint,
+    CONSTRAINT fk_type FOREIGN KEY (type_id)
+        REFERENCES type(id),
+    user_id       bigint,
+    CONSTRAINT user_fk FOREIGN KEY (user_id)
+        REFERENCES user(id)
+);
+
+create table hospital_test4.analysis_result
+(
+    id        bigint primary key auto_increment,
+    name      varchar(255),
+    value     varchar(255),
+    history_sick_id bigint,
+    CONSTRAINT fk_history_sick FOREIGN KEY (history_sick_id)
+        REFERENCES history_sick(id)
+);
 
 

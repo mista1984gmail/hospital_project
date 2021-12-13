@@ -17,6 +17,8 @@ public interface UserService extends UserDetailsService {
 
     boolean saveUser(User appUser);
 
+    void update(User user);
+
     boolean deleteUser(Integer id);
 
     User findByUsername(String username);

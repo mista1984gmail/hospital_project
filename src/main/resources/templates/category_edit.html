@@ -20,14 +20,28 @@
             </div>
         </div>
 
+
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4">Select one or several services: </label>
+                <div class="col-sm-8">
+                   <select th:field="*{types}" class="form-control" multiple="multiple" required>
+                       <th:block th:each="typ : ${listTypes}">
+                           <option th:text="${typ.name}" th:value="${typ.id}"/>
+                       </th:block>
+
+                   </select>
+                </div>
+            </div>
+
             <div class="text-center p-3">
                 <button type="submit" class="btn btn-primary">Save</button>
             </div>
         </div>
 
     </form>
+
+    <a th:href="@{/nurse}">Go back to the nurse page</a>
 </div>
-<a th:href="@{/nurse}">Go back to the nurse page</a>
 
 
 </body>

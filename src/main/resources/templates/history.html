@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>History sick</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+</head>
+<body>
+<div class="container text-center">
+    <div><h1>Patient info</h1></div>
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Date of birthday</th>
+            <th>Age</th>
+            <th>Address</th>
+            <th>email</th>
+            <th>Telephone</th>
+        </tr>
+        </thead>
+        <tbody>
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.firstName}"></td>
+            <td th:text="${user.lastName}"></td>
+            <td th:text="${user.birthday}"></td>
+            <td th:text="${user.age}"></td>
+            <td th:text="${user.address}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.telephone}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div><h1>History sick</h1></div>
+    <div>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name of services</th>
+                <th>Date</th>
+                <th>Results of analysis</th>
+                <th>Diagnosis</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="history : ${listHistorySick}">
+                <tr>
+                    <td>[[${history.id}]]</td>
+                    <td>[[${history.type.name}]]</td>
+                    <td>[[${history.dateOfAction}]]</td>
+                    <td>[[${history.analysisResults}]]</td>
+                    <td>[[${history.diagnosis}]]</td>
+
+                    <td>
+                        <a th:href="@{'/doctor/history/'+${user.id}+'/edit/'+${history.id}}">Edit</a>
+                        &nbsp;
+                        <a th:href="@{'/doctor/'+${user.id}+'/history/delete/'+${history.id}}">Delete</a>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        <div class="p-2">
+            <a class="h2" th:href="@{'/doctor/history/new/'+${user.id}}">Add a note</a>
+        </div>
+
+    </div>
+
+    <a class="h2" th:href="@{/doctor/patients}">Go back to the list patients</a>
+</div>
+</body>
+</html>
