@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin page</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+</head>
+<body>
+<div
+        style="border: 1px solid #ccc;padding:5px;margin-bottom:20px;">
+
+    <a th:href="@{/}">Home</a>
+
+    | &nbsp;
+
+    <a th:if="${#request.userPrincipal != null}" th:href="@{/logout}">Logout</a>
+
+</div>
+
+<div class="container text-center">
+    <div><h1>Welcome to Admin App</h1></div>
+    <div>
+        <div class="p-2">
+            <a class="h2" th:href="@{/admin/users}">List of users</a>
+        </div>
+
+
+    </div>
+</div>
+
+
+</body>
+
+</html>

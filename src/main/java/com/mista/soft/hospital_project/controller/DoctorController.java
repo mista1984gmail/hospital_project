@@ -34,6 +34,7 @@ public class DoctorController {
         for (int i = 0; i < patientsList.size(); i++) {
             if(!patientsList.get(i).getAuthorities().toString().contains("ROLE_USER")){
                 patientsList.remove(i);
+
             }
         }
         model.addAttribute("patientsList", patientsList);

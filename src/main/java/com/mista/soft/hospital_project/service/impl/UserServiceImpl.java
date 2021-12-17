@@ -13,6 +13,7 @@ import com.mista.soft.hospital_project.model.entity.Role;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -77,5 +78,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public List<User> findByLastName(String lastName) {
+        List<User>users=userRepository.findAll();
+        users.stream().filter(user -> user.getLastName().equals(lastName)).collect(Collectors.toList());
+        return users;
     }
 }

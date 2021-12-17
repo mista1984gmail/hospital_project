@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,6 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 //Доступ только для не зарегистрированных пользователей
+                .antMatchers("/", "/login", "/logout").permitAll()
                 .antMatchers("/registration").not().fullyAuthenticated()
                 //Доступ только для пользователей с ролью Администратор
                 .antMatchers("/admin/**").hasRole("ADMIN")
@@ -36,9 +38,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/doctor/**").hasRole("DOCTOR")
                 .antMatchers("/nurse/**").hasRole("NURSE")
                 //Доступ разрешен всем пользователей
-                .antMatchers("/", "/resources/**").permitAll()
+              //.antMatchers("/", "/resources/**","/index").permitAll()
                 //Все остальные страницы требуют аутентификации
-                .anyRequest().authenticated()
+               // .anyRequest().authenticated()
                 .and()
                 //Настройка для входа в систему
                 .formLogin()
