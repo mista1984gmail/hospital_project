@@ -4,16 +4,22 @@ import com.mista.soft.hospital_project.model.entity.Category;
 import com.mista.soft.hospital_project.model.entity.HistorySick;
 import com.mista.soft.hospital_project.model.entity.Type;
 import com.mista.soft.hospital_project.model.entity.User;
-import com.mista.soft.hospital_project.service.impl.CategoryServiceImpl;
-import com.mista.soft.hospital_project.service.impl.HistorySickServiceImpl;
-import com.mista.soft.hospital_project.service.impl.TypeServiceImpl;
-import com.mista.soft.hospital_project.service.impl.UserServiceImpl;
+import com.mista.soft.hospital_project.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -26,6 +32,8 @@ public class NurseController {
     UserServiceImpl userService;
     @Autowired
     HistorySickServiceImpl historySickService;
+    @Autowired
+    private SendEmailService sendEmailService;
 
     @RequestMapping(value = "/nurse", method = RequestMethod.GET)
     public String nursePage(Model model) {
@@ -62,10 +70,11 @@ public class NurseController {
 
     @GetMapping("/nurse/patients")
     public String listOfPatients( Model model){
-        List<User> patientsList = userService.allUsers();
-        for (int i = 0; i < patientsList.size(); i++) {
-            if(!patientsList.get(i).getAuthorities().toString().contains("ROLE_USER")){
-                patientsList.remove(i);
+        List<User> users = userService.allUsers();
+        List<User> patientsList = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            if(users.get(i).getAuthorities().toString().contains("ROLE_USER")) {
+                patientsList.add(users.get(i));
             }
         }
         model.addAttribute("patientsList", patientsList);
@@ -111,6 +120,79 @@ public class NurseController {
         historySick.setUser(user);
         user.addHistory(historySick);
         historySickService.save(historySick);
+
+        if(historySick.getType().getCategory().getName().equals("Analyzes")){
+
+        String body = String.format("Good afternoon, %s. Your test result of %s is %s",
+                                user.getFirstName(),
+                                historySick.getType().getName(),
+                                historySick.getAnalysisResults());
+
+        sendEmailService.sendEmail(user.getEmail(),body,"Test results");}
+
+        return "redirect:/nurse/history/{id}";
+    }
+    @InitBinder
+    public void bindingPreparation(WebDataBinder binder) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        CustomDateEditor orderDateEditor = new CustomDateEditor(dateFormat, true);
+        binder.registerCustomEditor(Date.class, orderDateEditor);
+    }
+
+    @PostMapping("/nurse/history/getAllOnDate/{id}")
+    public String historySickListOfDate(@PathVariable("id") Integer id,@ModelAttribute("dateFromForm") Date dateFromForm, Model model){
+        User user = userService.findUserById(id);
+        List<HistorySick> allListHistorySick = user.getHistorySicks();
+        List<HistorySick> listHistorySick = new ArrayList<>();
+
+        LocalDate date1 = dateFromForm.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        for (int i = 0; i < allListHistorySick.size(); i++) {
+
+            if(allListHistorySick.get(i).getDateOfAction().isAfter(date1)){
+                listHistorySick.add(allListHistorySick.get(i));
+            }
+        }
+        model.addAttribute("user", user);
+        model.addAttribute("listHistorySick", listHistorySick);
+        model.addAttribute("dateFromForm", date1);
+
+        return "history_nurse";
+    }
+
+    @GetMapping("/nurse/invoice/{id}/{dateFromForm}")
+    public String invoice(@PathVariable("id") Integer id,@PathVariable("dateFromForm") Date dateFromForm, Model model){
+        User user = userService.findUserById(id);
+        List<HistorySick> allListHistorySick = user.getHistorySicks();
+        List<HistorySick> listHistorySick = new ArrayList<>();
+
+        LocalDate date1 = dateFromForm.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        for (int i = 0; i < allListHistorySick.size(); i++) {
+
+            if(allListHistorySick.get(i).getDateOfAction().isAfter(date1)){
+                listHistorySick.add(allListHistorySick.get(i));
+            }
+        }
+        Date dateNow = new Date();
+        LocalDate date2 = dateNow.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        model.addAttribute("user", user);
+        model.addAttribute("listHistorySick", listHistorySick);
+        model.addAttribute("date2", date2);
+
+        return "invoice";
+    }
+
+    @GetMapping("/nurse/sendInvoice/{id}")
+    public String sendInvoice(@PathVariable("id") Integer id) throws MessagingException {
+        User user = userService.findUserById(id);
+
+
+            String body = String.format("Good afternoon, %s. Your invoice",
+                    user.getFirstName());
+            String path ="D:\\Downloads\\"+user.getLastName()+"_invoice.pdf";
+
+            sendEmailService.sendMessageWithAttachment(user.getEmail(),"Invoice", body,path);
 
         return "redirect:/nurse/history/{id}";
     }

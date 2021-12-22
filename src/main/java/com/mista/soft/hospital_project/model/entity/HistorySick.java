@@ -31,6 +31,9 @@ public class HistorySick {
     @Column(name="date_of_action")
     private LocalDate dateOfAction;
 
+    @Column
+    private String appointment;
+
     @OneToMany(mappedBy = "historySick", cascade = CascadeType.ALL)
     private List<AnalysisResult> analysisResults = new ArrayList<>();
 

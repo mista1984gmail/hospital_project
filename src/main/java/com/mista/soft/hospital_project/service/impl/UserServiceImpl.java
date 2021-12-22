@@ -67,6 +67,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateAdmin(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
     public boolean deleteUser(Integer id) {
         if (userRepository.findById(id).isPresent()) {
             userRepository.deleteById(id);

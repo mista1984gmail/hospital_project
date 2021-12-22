@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>History sick</title>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="container text-center">
@@ -34,7 +36,15 @@
         </tbody>
     </table>
     <div><h1>History sick</h1></div>
-    <div>
+
+    <form method="POST" th:action="@{'/doctor/history/getAllOnDate/'+${user.id}}">
+        <table>
+            <td><label for="dateFromForm">Date</label></td>
+            <td><input type="date" id="dateFromForm" name="dateFromForm" th:value="*{dateFromForm}"/></td>
+            <input type="submit" value="View all on date"/>
+        </table>
+    </form>
+
         <table class="table table-bordered">
             <thead class="thead-dark">
             <tr>
@@ -43,10 +53,18 @@
                 <th>Date</th>
                 <th>Results of analysis</th>
                 <th>Diagnosis</th>
+                <th>Appointment</th>
+                <th>Cost</th>
                 <th></th>
             </tr>
             </thead>
-            <tbody>
+            <tfoot>
+            <tr>
+                <td colspan="6"><b>Total</b></td>
+                <td id="granted" style="font-weight: bold;"></td>
+            </tr>
+            </tfoot>
+            <tbody id="myTable">
             <th:block th:each="history : ${listHistorySick}">
                 <tr>
                     <td>[[${history.id}]]</td>
@@ -54,7 +72,8 @@
                     <td>[[${history.dateOfAction}]]</td>
                     <td>[[${history.analysisResults}]]</td>
                     <td>[[${history.diagnosis}]]</td>
-
+                    <td>[[${history.appointment}]]</td>
+                    <td name="price">[[${history.type.price}]]</td>
                     <td>
                         <a th:href="@{'/doctor/history/'+${user.id}+'/edit/'+${history.id}}">Edit</a>
                         &nbsp;
@@ -64,6 +83,20 @@
             </th:block>
             </tbody>
         </table>
+        <script>
+
+            var tds = document.getElementsByName("price");
+
+            var total = 0;
+
+            for(var i=0; i<tds.length; i++)
+                total += parseInt(tds[i].innerHTML);
+
+            document.getElementById('granted').innerHTML=total;
+
+        </script>
+
+
         <div class="p-2">
             <a class="h2" th:href="@{'/doctor/history/new/'+${user.id}}">Add a note</a>
         </div>
@@ -71,6 +104,7 @@
     </div>
 
     <a class="h2" th:href="@{/doctor/patients}">Go back to the list patients</a>
+
 </div>
 </body>
 </html>

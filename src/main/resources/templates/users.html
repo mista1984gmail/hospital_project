@@ -19,6 +19,7 @@
                 <th>Login</th>
                 <th>Password</th>
                 <th>Role</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -30,6 +31,9 @@
                     <td>[[${user.username}]]</td>
                     <td>[[${user.password}]]</td>
                     <td>[[${user.roles}]]</td>
+                    <td>
+                        <a th:href="@{'/admin/edit/'+${user.id}}">Edit</a>
+                    </td>
                 </tr>
             </th:block>
             </tbody>

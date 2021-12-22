@@ -72,6 +72,12 @@ public class User implements UserDetails {
     @Transient
     private String passwordConfirm;
 
+    @Column
+    private boolean active;
+
+    @Column
+    private String activationCode;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
@@ -111,4 +117,5 @@ public class User implements UserDetails {
     public void addHistory(HistorySick historySick){
         historySicks.add(historySick);
     }
+
 }

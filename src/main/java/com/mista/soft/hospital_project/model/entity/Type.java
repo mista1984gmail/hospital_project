@@ -16,6 +16,9 @@ public class Type {
     private Integer id;
     @Column(length = 45, nullable = false, unique = true)
     private String name;
+    @Column
+    private double price;
+
     @ManyToOne
     @JoinColumn(name="category_id")
     private Category category;

@@ -68,5 +68,5 @@ create table hospital_test4.analysis_result
     CONSTRAINT fk_history_sick FOREIGN KEY (history_sick_id)
         REFERENCES history_sick(id)
 );
-
-
+ALTER TABLE hospital_test4.type ADD price double;
+ALTER TABLE hospital_test4.history_sick ADD  appointment varchar(256);

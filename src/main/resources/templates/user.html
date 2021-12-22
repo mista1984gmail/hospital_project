@@ -1,11 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>History sick</title>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
 </head>
 <body>
+<div sec:authorize="isAuthenticated()">
+   <!-- Authenticated as <span id = "username" sec:authentication="name"></span>-->
+    <br>
+    <div class="error" th:if="${#request.userPrincipal.getName()!=user.username}">
+       <script>
+           document.location.href = "/403";
+       </script>
+    </div>
+
+</div>
+
 
 <div
         style="border: 1px solid #ccc;padding:5px;margin-bottom:20px;">
@@ -59,6 +71,8 @@
                 <th>Date</th>
                 <th>Results of analysis</th>
                 <th>Diagnosis</th>
+                <th>Appointment</th>
+                <th>Price</th>
             </tr>
             </thead>
             <tbody>
@@ -69,7 +83,8 @@
                     <td>[[${history.dateOfAction}]]</td>
                     <td>[[${history.analysisResults}]]</td>
                     <td>[[${history.diagnosis}]]</td>
-
+                    <td>[[${history.appointment}]]</td>
+                    <td>[[${history.type.price}]]</td>
                 </tr>
             </th:block>
             </tbody>
