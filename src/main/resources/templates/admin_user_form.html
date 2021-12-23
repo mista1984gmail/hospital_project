@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
 </head>
 <body>
-<div><h2>Patient</h2></div>
+<div><h2>User</h2></div>
 <form action="#" th:action="@{'/admin/save/'+${user.id}}" th:object="${user}" method="post">
     <label for="id">Id</label>
     <input type="number" th:field="*{id}" id="id" placeholder="Id">
@@ -40,9 +40,6 @@
     <input type="text" th:field="*{password}" id="password" placeholder="password">
     <div style="color:red" class="alert alert-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name Error</div>
     <br>
-    <br>
-    <label for="passwordConfirm">PasswordConfirm</label>
-    <input type="text" th:field="*{passwordConfirm}" id="passwordConfirm" placeholder="PasswordConfirm">
 
     <th:block  th:each="role: ${roles}">
 
@@ -56,6 +53,9 @@
 
     </th:block>
 
+    <br>
+    <label for="active">active</label>
+    <input type="checkbox" th:field="*{active}" id="active" placeholder="active">
 
     <br>
     <input type="submit" value="Save">

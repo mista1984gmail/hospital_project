@@ -39,17 +39,20 @@ public class HomeController {
         Integer id = user.getId();
 
 
-        if(role.contains("ROLE_ADMIN")){
-            response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/admin"));
+        if(user.isActive()) {
+
+            if (role.contains("ROLE_ADMIN")) {
+                response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/admin"));
+            } else if (role.contains("ROLE_USER")) {
+                response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/user/history/" + id));
+            } else if (role.contains("ROLE_DOCTOR")) {
+                response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/doctor"));
+            } else if (role.contains("ROLE_NURSE")) {
+                response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/nurse"));
+            }
         }
-        else if(role.contains("ROLE_USER")) {
-            response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/user/history/"+id));
-        }
-        else if(role.contains("ROLE_DOCTOR")){
-            response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/doctor"));
-        }
-        else if(role.contains("ROLE_NURSE")){
-            response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/nurse"));
+        else {
+            response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "404"));
         }
 
     }
@@ -57,6 +60,11 @@ public class HomeController {
     public String accessDenied() {
 
         return "403";
+    }
+    @RequestMapping(value = "/404", method = RequestMethod.GET)
+    public String accessActivation() {
+
+        return "404";
     }
 
 }

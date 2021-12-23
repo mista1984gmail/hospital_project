@@ -75,7 +75,7 @@ public class User implements UserDetails {
     @Column
     private boolean active;
 
-    @Column
+    @Column (name="activation_code")
     private String activationCode;
 
     @ManyToMany(fetch = FetchType.EAGER)

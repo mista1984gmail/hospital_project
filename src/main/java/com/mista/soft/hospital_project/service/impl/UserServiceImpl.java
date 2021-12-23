@@ -9,10 +9,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.mista.soft.hospital_project.model.entity.Role;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    SendEmailService sendEmailService;
 
 
     @Override
@@ -48,6 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean saveUser(User user) {
+
         User userFromDB = userRepository.findByUsername(user.getUsername());
 
         if (userFromDB != null) {
@@ -55,15 +61,47 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setRoles(Collections.singleton(new Role(1, "ROLE_USER")));
+        user.setActivationCode(UUID.randomUUID().toString());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setActive(false);
         userRepository.save(user);
+
+        if(!StringUtils.isEmpty(user.getEmail())){
+            String message = String.format(
+                    "Hello, %s! \n" +
+                            "Welcome to Hospital. Please, visit next link: http://localhost:8080/activate/%s",
+                    user.getFirstName(),
+                    user.getActivationCode()
+            );
+            sendEmailService.send(user.getEmail(),"Activation code", message);
+        }
+
         return true;
     }
 
     @Override
     public void update(User user) {
+        user.setActive(true);
         user.setRoles(Collections.singleton(new Role(1, "ROLE_USER")));
+
         userRepository.save(user);
+
+    }
+
+    @Override
+    public void addUser(User user) {
+        user.setRoles(Collections.singleton(new Role(1, "ROLE_USER")));
+        user.setActivationCode(UUID.randomUUID().toString());
+        userRepository.save(user);
+        if(!StringUtils.isEmpty(user.getEmail())){
+            String message = String.format(
+                    "Hello, %s! \n" +
+                            "Welcome to Hospital. Please, visit next link:http://localhost:8080/activate/%s",
+                    user.getFirstName(),
+                    user.getActivationCode()
+            );
+            sendEmailService.send(user.getEmail(),"Activation code", message);
+        }
     }
 
     @Override
@@ -90,5 +128,18 @@ public class UserServiceImpl implements UserService {
         List<User>users=userRepository.findAll();
         users.stream().filter(user -> user.getLastName().equals(lastName)).collect(Collectors.toList());
         return users;
+    }
+
+    @Override
+    public boolean activateUser(String code) {
+        User user = userRepository.findByActivationCode(code);
+        if (user == null){
+            return false;
+        }
+        user.setActivationCode(null);
+        user.setActive(true);
+        userRepository.save(user);
+
+        return true;
     }
 }

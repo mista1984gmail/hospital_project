@@ -27,4 +27,8 @@ public interface UserService extends UserDetailsService {
 
     List<User>findByLastName(String lastName);
 
+    boolean activateUser(String code);
+
+    public void addUser(User user);
+
 }
