@@ -108,6 +108,14 @@ public class NurseController {
     @PostMapping("/nurse/history/save/{id}")
     public String saveHistory(@PathVariable("id") Integer id, HistorySick historySick, HttpServletRequest request){
         User user = userService.findUserById(id);
+
+        String[] historyId = request.getParameterValues("historyId");
+        boolean executeFromDB=false;
+        if(historyId!=null){
+            int idHistory = Integer.parseInt(historyId[0]);
+            HistorySick historyFromDB = historySickService.findById(idHistory);
+            executeFromDB = historyFromDB.isExecute();}
+
         String[] detailIDs = request.getParameterValues("detailID");
         String[] detailNames = request.getParameterValues("detailName");
         String[] detailValues = request.getParameterValues("detailValue");
@@ -117,6 +125,18 @@ public class NurseController {
             }else{
                 historySick.addAnalysisResults(detailNames[i], detailValues[i]);}
         }
+
+        if (!historySick.getType().getName().contains("Operation")){
+
+        String nurse = request.getUserPrincipal().getName();
+        User user2 = userService.findByUsername(nurse);
+        String nurseAppointment = "nurse "+user2.getFirstName() + " "+ user2.getLastName();
+
+        historySick.setUser(user);
+        if(historySick.isExecute()!=executeFromDB){
+            historySick.setExecuteAppointment(nurseAppointment);
+        }
+
         historySick.setUser(user);
         user.addHistory(historySick);
         historySickService.save(historySick);
@@ -128,7 +148,7 @@ public class NurseController {
                                 historySick.getType().getName(),
                                 historySick.getAnalysisResults());
 
-        sendEmailService.sendEmail(user.getEmail(),body,"Test results");}
+        sendEmailService.sendEmail(user.getEmail(),body,"Test results");}}
 
         return "redirect:/nurse/history/{id}";
     }

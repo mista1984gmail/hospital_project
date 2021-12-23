@@ -104,6 +104,13 @@ public class DoctorController {
     @PostMapping("/doctor/history/save/{id}")
     public String saveHistory(@PathVariable("id") Integer id, HistorySick historySick, HttpServletRequest request){
         User user = userService.findUserById(id);
+        String[] historyId = request.getParameterValues("historyId");
+        boolean executeFromDB=false;
+        if(historyId!=null){
+        int idHistory = Integer.parseInt(historyId[0]);
+        HistorySick historyFromDB = historySickService.findById(idHistory);
+        executeFromDB = historyFromDB.isExecute();}
+
         String[] detailIDs = request.getParameterValues("detailID");
         String[] detailNames = request.getParameterValues("detailName");
         String[] detailValues = request.getParameterValues("detailValue");
@@ -113,11 +120,16 @@ public class DoctorController {
             }else{
                 historySick.addAnalysisResults(detailNames[i], detailValues[i]);}
         }
+
         String doctor = request.getUserPrincipal().getName();
         User user2 = userService.findByUsername(doctor);
        String doctorAppointment = "prof. "+user2.getFirstName() + " "+ user2.getLastName();
        historySick.setAppointment(doctorAppointment);
         historySick.setUser(user);
+        if(historySick.isExecute()!=executeFromDB){
+            historySick.setExecuteAppointment(doctorAppointment);
+        }
+
         user.addHistory(historySick);
         historySickService.save(historySick);
 
@@ -143,6 +155,7 @@ public class DoctorController {
         List<Type> listTypes=typeService.findAll();
 
         model.addAttribute("listTypes", listTypes);
+
         return "history_form";
     }
 

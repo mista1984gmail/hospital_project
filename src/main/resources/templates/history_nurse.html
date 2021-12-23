@@ -57,8 +57,10 @@
                 <th>Name of services</th>
                 <th>Date</th>
                 <th>Results of analysis</th>
-                <th>Diagnosis</th>
+                <th>Diagnosis/Detail</th>
                 <th>Appointment</th>
+                <th>Execute</th>
+                <th>Execute appointment</th>
                 <th>Cost</th>
 
                 <th></th>
@@ -66,7 +68,7 @@
             </thead>
             <tfoot>
             <tr>
-                <td colspan="6"><b>Total</b></td>
+                <td colspan="8"><b>Total</b></td>
                 <td id="granted" style="font-weight: bold;"></td>
             </tr>
             </tfoot>
@@ -79,6 +81,8 @@
                     <td>[[${history.analysisResults}]]</td>
                     <td>[[${history.diagnosis}]]</td>
                     <td>[[${history.appointment}]]</td>
+                    <td>[[${history.execute}]]</td>
+                    <td>[[${history.executeAppointment}]]</td>
                     <td name="price">[[${history.type.price}]]</td>
                     <td>
                         <a th:href="@{'/nurse/history/'+${user.id}+'/edit/'+${history.id}}">Edit</a>
@@ -87,16 +91,6 @@
             </th:block>
             </tbody>
         </table>
-
-        <script>
-            function generatePDF() {
-                const element = document.getElementById('invoice');
-
-                html2pdf()
-                    .from(element)
-                    .save();
-            }
-        </script>
 
         <script>
 
@@ -111,7 +105,6 @@
 
         </script>
 
-        <button onclick="generatePDF()">Download</button>
 
     </div>
 

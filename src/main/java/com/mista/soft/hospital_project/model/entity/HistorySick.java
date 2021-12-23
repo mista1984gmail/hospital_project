@@ -34,6 +34,12 @@ public class HistorySick {
     @Column
     private String appointment;
 
+    @Column
+    private String executeAppointment;
+
+    @Column
+    private boolean execute;
+
     @OneToMany(mappedBy = "historySick", cascade = CascadeType.ALL)
     private List<AnalysisResult> analysisResults = new ArrayList<>();
 

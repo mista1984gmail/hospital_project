@@ -71,6 +71,8 @@ create table hospital_test4.analysis_result
 ALTER TABLE hospital_test4.type ADD price double;
 ALTER TABLE hospital_test4.history_sick ADD  appointment varchar(256);
 alter table hospital_test4.user  add column active bool;
-ALTER TABLE hospital_test4.user ADD  activation_сode varchar(256);
+ALTER TABLE hospital_test4.user ADD  activation_code varchar(256);
+ALTER TABLE hospital_test4.history_sick ADD  execute_appointment varchar(256);
+alter table hospital_test4.history_sick  add column execute bool;
 
 

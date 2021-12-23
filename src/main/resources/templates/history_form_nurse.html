@@ -31,7 +31,7 @@
     <div th:unless="${history.id == null}"><h1>Edit History sick</h1></div>
     <form th:action="@{'/nurse/history/save/'+${user.id}}" th:object="${history}" method="post"
             style="max-width: 600px; margin: 0 auto";>
-        <input type="hidden" th:field="*{id}" th:value="${history.id}"/>
+        <input type="hidden" name="historyId" th:field="*{id}" th:value="${history.id}"/>
 
         <div class="m-3">
 
@@ -88,7 +88,7 @@
             </th:block>
 
                 <div class="form-group row">
-                    <label class="col-form-label col-sm-4">Diagnosis: </label>
+                    <label class="col-form-label col-sm-4">Diagnosis/Detail: </label>
                     <div class="col-sm-8">
                         <input type="text" th:field="*{diagnosis}" class="form-control" required />
                     </div>
@@ -100,6 +100,15 @@
                     <input type="text" th:field="*{appointment}" class="form-control" required />
                 </div>
             </div>
+
+            <th:block th:if="${history.appointment != null}">
+                <div class="form-group row">
+                    <label for="execute">Execute of appointment:</label>
+                    <div class="col-sm-8" >
+                    <input type="checkbox" th:field="*{execute}" id="execute" placeholder="execute">
+                    </div>
+                </div>
+            </th:block>
 
 
             <div class="text-center p-3">
