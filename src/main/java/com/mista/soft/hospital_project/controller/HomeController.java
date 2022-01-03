@@ -1,11 +1,14 @@
 package com.mista.soft.hospital_project.controller;
 
+import com.mista.soft.hospital_project.model.entity.Type;
 import com.mista.soft.hospital_project.model.entity.User;
+import com.mista.soft.hospital_project.service.impl.TypeServiceImpl;
 import com.mista.soft.hospital_project.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.WebUtils;
@@ -15,10 +18,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class HomeController {
+
     private final UserServiceImpl userService;
+
+    @Autowired
+    private TypeServiceImpl typeService;
 
     @Autowired
     public HomeController(UserServiceImpl userService) {
@@ -56,6 +64,14 @@ public class HomeController {
         }
 
     }
+
+    @GetMapping("/price")
+    public String price(Model model){
+        List<Type> listTypes = typeService.findAll();
+        model.addAttribute("listTypes", listTypes);
+        return "price";
+    }
+
     @RequestMapping(value = "/403", method = RequestMethod.GET)
     public String accessDenied() {
 

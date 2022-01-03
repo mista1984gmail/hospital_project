@@ -1,64 +1,8 @@
 /**********************************
 Common Styles
 ************************************/
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-body{
-    background-color: #fff;
-    color: #565252;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    font-size: 20px;
-    text-rendering: optimizeLegibility;
-}
-.col-1 {width: 8.33%;}
-.col-2 {width: 16.66%;}
-.col-3 {width: 25%;}
-.col-4 {width: 33.33%;}
-.col-5 {width: 41.66%;}
-.col-6 {width: 50%;}
-.col-7 {width: 58.33%;}
-.col-8 {width: 66.66%;}
-.col-9 {width: 75%;}
-.col-10 {width: 83.33%;}
-.col-11 {width: 91.66%;}
-.col-12 {width: 100%;}
-
-[class*="col-"] {
-    float: left;
-    padding: 3%;
-
-}
-h1{
-    margin: 0;
-}
-
-section{
-    padding: 0px 0;
-    clear: both;
-}
-h2{
-    font-weight: 300;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    word-spacing: 2px;
-    text-align: center;
-    margin-bottom: 30px;
-}
-h2:after{
-    display: block;
-    height: 2px;
-    background-color: #81E0FD;
-    content: " ";
-    width: 150px;
-    margin: 0 auto;
-    margin-top: 30px;
 
 
-}
 /**********************************
 Header Styles
 ************************************/
@@ -73,142 +17,98 @@ header{
 #header-title{
     max-width: 45%;
     margin-left: 60%;
+    margin-top: 10px;
     padding: 5px;
     text-transform: uppercase;
-    color: #171717;
+    color: black;
     letter-spacing: 0.179487em;
     font-size: 1.8em;
     line-height: 1em;
+    font-family: 'Roboto', sans-serif;
     font-width: 400;
     font-style: normal;
-;
-}
-#header-headline{
-    max-width: 32%;
-    margin-top: 20px;
-    margin-left: 8.33%;
-    background: white;
-    padding: 5px;
-}
-.header-text{
-    padding-top: 350px;
-}
-
-#button-header{
-    margin-left: 63%;
-}
-#logo-text{
-    float: left;
-    color: black;
-}
-#text-logo2{
-    padding-top: 50px;
-}
-
-#main-nav{
-    float: right;
-    list-style: none;
-}
-#main-nav li{
-    display: inline-block;
-    margin-right: 30px;
-    margin-top: 15px;
+    text-shadow: 2px 2px 3px #000;
 
 }
-#main-nav li a{
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 1em;
-    color: #0000cc;
-    font-weight: 520;
+h5{
+    color: darkred;
+    font-weight: 1000;
 }
-nav{
 
-    height: 30px;
-    padding: 20px;
+h4{
+    margin-left: 20px;
+    background-color: #b4dcfa;
 }
 
 /**********************************
 Features Styles
 ************************************/
-#headline-text{
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 100%;
+
+
+
+
+/**********************************
+Food Images Styles
+************************************/
+
+/**********************************
+Button Styles
+************************************/
+#button-header{
+   padding-top: 200px;
+
+}
+#button-header1{
+    box-shadow: 0 0 5px 2px;
+}
+#button-header2{
+    box-shadow: 0 0 5px 2px;
+}
+#dropdownMenu2{
+    margin-top: 10px;
+    margin-left: 1100px;
+    position: fixed;
+    background-color: #b2b7e6;
+    opacity: 0.7;
+    color: #1123c7;
+    font-weight: 500;
+    border-color: #dcd6e8;
+    box-shadow: 0 0 5px 2px;
 }
 
+.text-logo2{
+    padding-top: 30px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 50px;
+}
+#about-us{
+    margin: 5px;
+    padding: 10px;
+}
 .features-icon{
     font-size: 300%;
     color: #81E0FD;
     margin-bottom: 20px;
 }
-section p{
-    font-size: 85%;
-}
-/**********************************
-Food Images Styles
-************************************/
-.images-container{
-    list-style: none;
-    width: 100%;
 
+#carouselIndicators{
+    background-color: #8ecaf6;
 }
-.images-container li{
-    display: block;
-    float: left;
-    width: 25%;
+
+#carouselExampleCaptions{
+    margin-left: 300px;
+    width: 35rem;
 }
-.medicine-image{
-    width: 100%;
-    overflow: hidden;
-    background: black;
+.slide{
+    color: black;
+    font-family: 'Roboto', sans-serif;
 }
-.medicine-image img {
-    opacity: 0.7;
-    width: 100%;
+.card-img-top{
+    width: 100px;
     height: auto;
-    transform: scale(1.2);
-    transition: transform 0.5s, opacity 0.5s;
 }
-.medicine-image img:hover{
-    opacity: 1;
-    transform: scale(1.05);
-}
-/**********************************
-Button Styles
-************************************/
-.button:link,
-.button:visited {
-    display: inline-block;
-    padding: 10px 30px;
-    text-decoration: none;
-    color: #81E0FD;
-    font-weight: 300;
-    border-radius: 150px;
-    transition: background-color 0.3s, border 0.3s;
-}
-.button-registration:link,
-.button-registration:visited{
-    background-color: #0A21ED;
-    border: 1px solid #0A21ED;
+.card{
+    width: 18rem;
 }
 
-.button-login:link,
-.button-login:visited{
-    border: 1px solid #81E0FD;
-}
-
-.button:hover,
-.button:active{
-    background: #081abc;
-}
-
-.button-registration:hover,
-.button-registration:active{
-    border: 1px solid #081abc;
-}
-
-.button-login:hover,
-.button-login:active{
-    border: 1px solid #081abc;
-}

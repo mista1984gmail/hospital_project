@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List Types</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+</head>
+<body>
+<div style="border: 1px solid #ccc;padding:5px;margin-bottom:20px;background-color: #b4dcfa">
+    <a class="text-white" th:href="@{/}">Home</a>
+    | &nbsp;
+</div>
+<div class="container text-center">
+    <div><h1>Full list of medical services</h1></div>
+    <div>
+        <table class="table table-striped">
+            <thead >
+            <tr>
+
+                <th>Name of services</th>
+                <th>Price, $</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="typ : ${listTypes}">
+                <tr>
+                    <td>[[${typ.name}]]</td>
+                    <td>[[${typ.price}]]</td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+</body>
+</html>
