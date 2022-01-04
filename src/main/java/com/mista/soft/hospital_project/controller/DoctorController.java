@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
+@RequestMapping("/doctor")
 public class DoctorController {
     @Autowired
     HistorySickServiceImpl historySickService;
@@ -36,11 +37,6 @@ public class DoctorController {
 
     @RequestMapping(value = "/doctor", method = RequestMethod.GET)
     public String doctorPage(Model model) {
-        return "doctor";
-    }
-
-    @GetMapping("/doctor/patients")
-    public String listOfPatients( Model model){
         List<User> users = userService.allUsers();
         List<User> patientsList = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
@@ -50,10 +46,10 @@ public class DoctorController {
         }
         model.addAttribute("patientsList", patientsList);
 
-        return "patients";
+        return "doctor/doctor";
     }
 
-    @GetMapping("/doctor/history/{id}")
+    @GetMapping("/history/{id}")
     public String historySickList(@PathVariable("id") Integer id, Model model){
         User user = userService.findUserById(id);
         List<HistorySick> listHistorySick = user.getHistorySicks();
@@ -61,7 +57,7 @@ public class DoctorController {
         model.addAttribute("listHistorySick", listHistorySick);
        model.addAttribute("dateFromForm", new Date());
 
-        return "history";
+        return "doctor/history";
     }
     @InitBinder
     public void bindingPreparation(WebDataBinder binder) {
@@ -70,7 +66,7 @@ public class DoctorController {
         binder.registerCustomEditor(Date.class, orderDateEditor);
     }
 
-    @PostMapping("/doctor/history/getAllOnDate/{id}")
+    @PostMapping("/history/getAllOnDate/{id}")
     public String historySickListOfDate(@PathVariable("id") Integer id,@ModelAttribute("dateFromForm") Date dateFromForm, Model model){
         User user = userService.findUserById(id);
         List<HistorySick> allListHistorySick = user.getHistorySicks();
@@ -88,20 +84,20 @@ public class DoctorController {
         model.addAttribute("listHistorySick", listHistorySick);
         model.addAttribute("dateFromForm", date1);
 
-        return "history";
+        return "doctor/history";
     }
 
-    @GetMapping("/doctor/history/new/{id}")
+    @GetMapping("/history/new/{id}")
     public String showNewHistoryForm(@PathVariable("id") Integer id, Model model){
         User user = userService.findUserById(id);
         List<Type> listTypes = typeService.findAll();
         model.addAttribute("user", user);
         model.addAttribute("history", new HistorySick());
         model.addAttribute("listTypes", listTypes);
-        return "history_form";
+        return "doctor/history_form";
     }
 
-    @PostMapping("/doctor/history/save/{id}")
+    @PostMapping("/history/save/{id}")
     public String saveHistory(@PathVariable("id") Integer id, HistorySick historySick, HttpServletRequest request){
         User user = userService.findUserById(id);
         String[] historyId = request.getParameterValues("historyId");
@@ -123,7 +119,7 @@ public class DoctorController {
 
         String doctor = request.getUserPrincipal().getName();
         User user2 = userService.findByUsername(doctor);
-       String doctorAppointment = "prof. "+user2.getFirstName() + " "+ user2.getLastName();
+       String doctorAppointment = "doc. "+user2.getFirstName() + " "+ user2.getLastName();
        historySick.setAppointment(doctorAppointment);
         historySick.setUser(user);
         if(historySick.isExecute()!=executeFromDB){
@@ -136,13 +132,13 @@ public class DoctorController {
         return "redirect:/doctor/history/{id}";
     }
 
-    @GetMapping("doctor/{userId}/history/delete/{historyId}")
+    @GetMapping("/{userId}/history/delete/{historyId}")
     public String deleteHistory(@PathVariable("historyId") Integer historyId, @PathVariable("userId") Integer userId, Model model){
         historySickService.deleteById(historyId);
         return "redirect:/doctor/history/{userId}";
     }
 
-    @GetMapping("/doctor/history/{userId}/edit/{historyId}")
+    @GetMapping("/history/{userId}/edit/{historyId}")
     public String showEditHistoryForm(@PathVariable("historyId") Integer historyId, @PathVariable("userId") Integer userId, Model model){
 
         HistorySick history = historySickService.findById(historyId);
@@ -156,7 +152,7 @@ public class DoctorController {
 
         model.addAttribute("listTypes", listTypes);
 
-        return "history_form";
+        return "doctor/history_form";
     }
 
 

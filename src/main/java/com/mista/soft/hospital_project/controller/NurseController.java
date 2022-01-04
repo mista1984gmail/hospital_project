@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
+@RequestMapping("/nurse")
 public class NurseController {
     @Autowired
     private CategoryServiceImpl categoryService;
@@ -37,38 +38,47 @@ public class NurseController {
 
     @RequestMapping(value = "/nurse", method = RequestMethod.GET)
     public String nursePage(Model model) {
-        return "nurse";
+        List<User> users = userService.allUsers();
+        List<User> patientsList = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            if(users.get(i).getAuthorities().toString().contains("ROLE_USER")) {
+                patientsList.add(users.get(i));
+            }
+        }
+        model.addAttribute("patientsList", patientsList);
+        return "nurse/nurse";
     }
 
-    @GetMapping("/nurse/category/new")
+    @GetMapping("/category/new")
     public String showCreateNewCategoryForm(Model model){
         List<Type> listTypes=typeService.findAll();
         model.addAttribute("listTypes", listTypes);
         model.addAttribute("category", new Category());
-        return "category_form";
+        return "nurse/category_form";
     }
 
-    @PostMapping("/nurse/categories/save")
+    @PostMapping("/categories/save")
     public String saveCategory(Category category){
         categoryService.save(category);
         return "redirect:/nurse/categories";
     }
 
-    @GetMapping("/nurse/categories")
+    @GetMapping("/categories")
     public String listCategories(Model model){
         List<Category> listCategories = categoryService.findAll();
         model.addAttribute("listCategories", listCategories);
-        return "categories";
+        return "nurse/categories";
     }
-    @GetMapping("/nurse/categories/edit/{id}")
+    @GetMapping("/categories/edit/{id}")
     public String showEditHistoryForm(@PathVariable("id") Integer id, Model model){
         Category category = categoryService.findById(id);
         List<Type> listTypes = category.getTypes();
         model.addAttribute("listTypes", listTypes);
         model.addAttribute("category", category);
-        return "category_edit";}
+        return "nurse/category_edit";}
 
-    @GetMapping("/nurse/patients")
+
+    @GetMapping("/patients")
     public String listOfPatients( Model model){
         List<User> users = userService.allUsers();
         List<User> patientsList = new ArrayList<>();
@@ -78,19 +88,19 @@ public class NurseController {
             }
         }
         model.addAttribute("patientsList", patientsList);
-
-        return "patients_nurse";
+        return "nurse/patients_nurse";
     }
-    @GetMapping("/nurse/history/{id}")
+
+    @GetMapping("/history/{id}")
     public String historySickList(@PathVariable("id") Integer id, Model model){
         User user = userService.findUserById(id);
         List<HistorySick> listHistorySick = user.getHistorySicks();
         model.addAttribute("user", user);
         model.addAttribute("listHistorySick", listHistorySick);
 
-        return "history_nurse";
+        return "nurse/history_nurse";
     }
-    @GetMapping("/nurse/history/{userId}/edit/{historyId}")
+    @GetMapping("/history/{userId}/edit/{historyId}")
     public String showEditHistoryForm(@PathVariable("historyId") Integer historyId, @PathVariable("userId") Integer userId, Model model){
 
         HistorySick history = historySickService.findById(historyId);
@@ -103,9 +113,10 @@ public class NurseController {
         List<Type> listTypes=typeService.findAll();
 
         model.addAttribute("listTypes", listTypes);
-        return "history_form_nurse";
+        return "nurse/history_form_nurse";
     }
-    @PostMapping("/nurse/history/save/{id}")
+
+    @PostMapping("/history/save/{id}")
     public String saveHistory(@PathVariable("id") Integer id, HistorySick historySick, HttpServletRequest request){
         User user = userService.findUserById(id);
 
@@ -152,6 +163,7 @@ public class NurseController {
 
         return "redirect:/nurse/history/{id}";
     }
+
     @InitBinder
     public void bindingPreparation(WebDataBinder binder) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -159,7 +171,7 @@ public class NurseController {
         binder.registerCustomEditor(Date.class, orderDateEditor);
     }
 
-    @PostMapping("/nurse/history/getAllOnDate/{id}")
+    @PostMapping("/history/getAllOnDate/{id}")
     public String historySickListOfDate(@PathVariable("id") Integer id,@ModelAttribute("dateFromForm") Date dateFromForm, Model model){
         User user = userService.findUserById(id);
         List<HistorySick> allListHistorySick = user.getHistorySicks();
@@ -177,10 +189,10 @@ public class NurseController {
         model.addAttribute("listHistorySick", listHistorySick);
         model.addAttribute("dateFromForm", date1);
 
-        return "history_nurse";
+        return "nurse/history_nurse";
     }
 
-    @GetMapping("/nurse/invoice/{id}/{dateFromForm}")
+    @GetMapping("/invoice/{id}/{dateFromForm}")
     public String invoice(@PathVariable("id") Integer id,@PathVariable("dateFromForm") Date dateFromForm, Model model){
         User user = userService.findUserById(id);
         List<HistorySick> allListHistorySick = user.getHistorySicks();
@@ -200,10 +212,10 @@ public class NurseController {
         model.addAttribute("listHistorySick", listHistorySick);
         model.addAttribute("date2", date2);
 
-        return "invoice";
+        return "nurse/invoice";
     }
 
-    @GetMapping("/nurse/sendInvoice/{id}")
+    @GetMapping("/sendInvoice/{id}")
     public String sendInvoice(@PathVariable("id") Integer id) throws MessagingException {
         User user = userService.findUserById(id);
 
@@ -215,5 +227,26 @@ public class NurseController {
             sendEmailService.sendMessageWithAttachment(user.getEmail(),"Invoice", body,path);
 
         return "redirect:/nurse/history/{id}";
+    }
+
+    @GetMapping("/types")
+    public String listTypes(Model model){
+        List<Type> listTypes = typeService.findAll();
+        model.addAttribute("listTypes", listTypes);
+        return "nurse/types";
+    }
+    @GetMapping("/types/new")
+    public String showTypeNewForm(Model model){
+        List<Category> listCategories = categoryService.findAll();
+        model.addAttribute("listCategories", listCategories);
+        model.addAttribute("type", new Type());
+
+        return "nurse/type_form";
+    }
+
+    @PostMapping("/types/save")
+    public String saveType(Type type){
+        typeService.save(type);
+        return "redirect:nurse/types";
     }
 }

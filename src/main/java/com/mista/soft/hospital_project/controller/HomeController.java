@@ -50,13 +50,13 @@ public class HomeController {
         if(user.isActive()) {
 
             if (role.contains("ROLE_ADMIN")) {
-                response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/admin"));
+                response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/admin/admin"));
             } else if (role.contains("ROLE_USER")) {
                 response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/user/history/" + id));
             } else if (role.contains("ROLE_DOCTOR")) {
-                response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/doctor"));
+                response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/doctor/doctor"));
             } else if (role.contains("ROLE_NURSE")) {
-                response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/nurse"));
+                response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/nurse/nurse"));
             }
         }
         else {

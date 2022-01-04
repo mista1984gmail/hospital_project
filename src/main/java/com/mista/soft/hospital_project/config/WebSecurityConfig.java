@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/doctor/**").hasRole("DOCTOR")
                 .antMatchers("/nurse/**").hasRole("NURSE")
                 //Доступ разрешен всем пользователей
-              //.antMatchers("/", "/resources/**","/index").permitAll()
+              /*.antMatchers("/", "/resources/**","/index").permitAll()*/
                 //Все остальные страницы требуют аутентификации
                // .anyRequest().authenticated()
                 .and()

@@ -1,38 +1,36 @@
 package com.mista.soft.hospital_project.controller;
 
-import com.mista.soft.hospital_project.model.entity.HistorySick;
 import com.mista.soft.hospital_project.model.entity.User;
 import com.mista.soft.hospital_project.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import com.mista.soft.hospital_project.model.entity.Role;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.*;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
     @Autowired
     UserServiceImpl userService;
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    public String adminPage() {
-        return "admin";
-    }
-
-    @GetMapping("/admin/users")
-    public String listOfPatients( Model model){
+    public String adminPage(Model model) {
         List<User> usersList = userService.allUsers();
         model.addAttribute("usersList", usersList);
-
-        return "users";
+        return "admin/admin";
     }
-    @GetMapping("/admin/edit/{id}")
+
+    @GetMapping("/edit/{id}")
     public String showEditUserFormAdmin(@PathVariable("id") Integer id, Model model){
 
         User user = userService.findUserById(id);
+
         Set<Role> listRoles = new HashSet<>();
 
         listRoles=user.getRoles();
@@ -46,11 +44,11 @@ public class AdminController {
 
         model.addAttribute("user", user);
         model.addAttribute("roles", roles);
-        return "admin_user_form";
+        return "admin/admin_user_form";
     }
 
-    @PostMapping("/admin/save/{id}")
-    public String saveUserAdmin(@PathVariable("id") Integer id, User user, HttpServletRequest request){
+    @PostMapping("/save/{id}")
+    public String saveUserAdmin(@PathVariable("id") Integer id, @Valid User user, HttpServletRequest request, BindingResult bindingResult){
 
         String[] detailIDs = request.getParameterValues("detailID");
         String[] detailNames = request.getParameterValues("detailName");
@@ -75,8 +73,9 @@ public class AdminController {
             }
 
         }
+
         userService.updateAdmin(user);
-        return "redirect:/admin/users";
+        return "redirect:/admin/admin";
     }
 
 }
