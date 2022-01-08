@@ -24,13 +24,11 @@ public class UserController {
         model.addAttribute("listHistorySick", listHistorySick);
         return "/user/user";
     }
+
     @GetMapping("/edit/{id}")
     public String showEditUserForm(@PathVariable("id") Integer id, Model model){
-
         User user = userService.findUserById(id);
-
         model.addAttribute("user", user);
-
         return "/user/user_form";
     }
 

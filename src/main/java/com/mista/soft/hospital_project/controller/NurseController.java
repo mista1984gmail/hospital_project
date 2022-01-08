@@ -18,7 +18,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,13 +37,7 @@ public class NurseController {
 
     @RequestMapping(value = "/nurse", method = RequestMethod.GET)
     public String nursePage(Model model) {
-        List<User> users = userService.allUsers();
-        List<User> patientsList = new ArrayList<>();
-        for (int i = 0; i < users.size(); i++) {
-            if(users.get(i).getAuthorities().toString().contains("ROLE_USER")) {
-                patientsList.add(users.get(i));
-            }
-        }
+        List<User> patientsList = userService.allUsersWithRoleUser();
         model.addAttribute("patientsList", patientsList);
         return "nurse/nurse";
     }
@@ -69,26 +62,14 @@ public class NurseController {
         model.addAttribute("listCategories", listCategories);
         return "nurse/categories";
     }
+
     @GetMapping("/categories/edit/{id}")
     public String showEditHistoryForm(@PathVariable("id") Integer id, Model model){
         Category category = categoryService.findById(id);
         List<Type> listTypes = category.getTypes();
         model.addAttribute("listTypes", listTypes);
         model.addAttribute("category", category);
-        return "nurse/category_edit";}
-
-
-    @GetMapping("/patients")
-    public String listOfPatients( Model model){
-        List<User> users = userService.allUsers();
-        List<User> patientsList = new ArrayList<>();
-        for (int i = 0; i < users.size(); i++) {
-            if(users.get(i).getAuthorities().toString().contains("ROLE_USER")) {
-                patientsList.add(users.get(i));
-            }
-        }
-        model.addAttribute("patientsList", patientsList);
-        return "nurse/patients_nurse";
+        return "nurse/category_edit";
     }
 
     @GetMapping("/history/{id}")
@@ -100,132 +81,49 @@ public class NurseController {
 
         return "nurse/history_nurse";
     }
+
     @GetMapping("/history/{userId}/edit/{historyId}")
     public String showEditHistoryForm(@PathVariable("historyId") Integer historyId, @PathVariable("userId") Integer userId, Model model){
-
         HistorySick history = historySickService.findById(historyId);
         User user = userService.findUserById(userId);
-
         model.addAttribute("user", user);
-
         model.addAttribute("history", history);
-
         List<Type> listTypes=typeService.findAll();
-
         model.addAttribute("listTypes", listTypes);
         return "nurse/history_form_nurse";
-    }
-
-    @PostMapping("/history/save/{id}")
-    public String saveHistory(@PathVariable("id") Integer id, HistorySick historySick, HttpServletRequest request){
-        User user = userService.findUserById(id);
-
-        String[] historyId = request.getParameterValues("historyId");
-        boolean executeFromDB=false;
-        if(historyId!=null){
-            int idHistory = Integer.parseInt(historyId[0]);
-            HistorySick historyFromDB = historySickService.findById(idHistory);
-            executeFromDB = historyFromDB.isExecute();}
-
-        String[] detailIDs = request.getParameterValues("detailID");
-        String[] detailNames = request.getParameterValues("detailName");
-        String[] detailValues = request.getParameterValues("detailValue");
-        for(int i = 0; i < detailNames.length; i++){
-            if(detailIDs != null && detailIDs.length > 0){
-                historySick.setAnalysisResults(Integer.valueOf(detailIDs[i]), detailNames[i], detailValues[i]);
-            }else{
-                historySick.addAnalysisResults(detailNames[i], detailValues[i]);}
-        }
-
-        if (!historySick.getType().getName().contains("Operation")){
-
-        String nurse = request.getUserPrincipal().getName();
-        User user2 = userService.findByUsername(nurse);
-        String nurseAppointment = "nurse "+user2.getFirstName() + " "+ user2.getLastName();
-
-        historySick.setUser(user);
-        if(historySick.isExecute()!=executeFromDB){
-            historySick.setExecuteAppointment(nurseAppointment);
-        }
-
-        historySick.setUser(user);
-        user.addHistory(historySick);
-        historySickService.save(historySick);
-
-        if(historySick.getType().getCategory().getName().equals("Analyzes")){
-
-        String body = String.format("Good afternoon, %s. Your test result of %s is %s",
-                                user.getFirstName(),
-                                historySick.getType().getName(),
-                                historySick.getAnalysisResults());
-
-        sendEmailService.sendEmail(user.getEmail(),body,"Test results");}}
-
-        return "redirect:/nurse/history/{id}";
-    }
-
-    @InitBinder
-    public void bindingPreparation(WebDataBinder binder) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        CustomDateEditor orderDateEditor = new CustomDateEditor(dateFormat, true);
-        binder.registerCustomEditor(Date.class, orderDateEditor);
     }
 
     @PostMapping("/history/getAllOnDate/{id}")
     public String historySickListOfDate(@PathVariable("id") Integer id,@ModelAttribute("dateFromForm") Date dateFromForm, Model model){
         User user = userService.findUserById(id);
-        List<HistorySick> allListHistorySick = user.getHistorySicks();
-        List<HistorySick> listHistorySick = new ArrayList<>();
-
-        LocalDate date1 = dateFromForm.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-        for (int i = 0; i < allListHistorySick.size(); i++) {
-
-            if(allListHistorySick.get(i).getDateOfAction().isAfter(date1)){
-                listHistorySick.add(allListHistorySick.get(i));
-            }
-        }
+        List<HistorySick> listHistorySick = historySickService.findAllByDate(user,dateFromForm);
+        LocalDate dateToForm = dateFromForm.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         model.addAttribute("user", user);
         model.addAttribute("listHistorySick", listHistorySick);
-        model.addAttribute("dateFromForm", date1);
-
+        model.addAttribute("dateFromForm", dateToForm);
         return "nurse/history_nurse";
     }
 
     @GetMapping("/invoice/{id}/{dateFromForm}")
     public String invoice(@PathVariable("id") Integer id,@PathVariable("dateFromForm") Date dateFromForm, Model model){
         User user = userService.findUserById(id);
-        List<HistorySick> allListHistorySick = user.getHistorySicks();
-        List<HistorySick> listHistorySick = new ArrayList<>();
-
-        LocalDate date1 = dateFromForm.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-        for (int i = 0; i < allListHistorySick.size(); i++) {
-
-            if(allListHistorySick.get(i).getDateOfAction().isAfter(date1)){
-                listHistorySick.add(allListHistorySick.get(i));
-            }
-        }
+        List<HistorySick> listHistorySick = historySickService.findAllByDate(user,dateFromForm);
         Date dateNow = new Date();
-        LocalDate date2 = dateNow.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dateToForm = dateNow.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         model.addAttribute("user", user);
         model.addAttribute("listHistorySick", listHistorySick);
-        model.addAttribute("date2", date2);
-
+        model.addAttribute("dateToForm", dateToForm);
         return "nurse/invoice";
     }
 
     @GetMapping("/sendInvoice/{id}")
     public String sendInvoice(@PathVariable("id") Integer id) throws MessagingException {
         User user = userService.findUserById(id);
-
-
-            String body = String.format("Good afternoon, %s. Your invoice",
-                    user.getFirstName());
-            String path ="D:\\Downloads\\"+user.getLastName()+"_invoice.pdf";
-
-            sendEmailService.sendMessageWithAttachment(user.getEmail(),"Invoice", body,path);
-
+        sendEmailService.sendMessageWithAttachment(
+                user.getEmail(),
+                "Invoice",
+                user.getFirstName(),
+                user.getLastName());
         return "redirect:/nurse/history/{id}";
     }
 
@@ -235,6 +133,7 @@ public class NurseController {
         model.addAttribute("listTypes", listTypes);
         return "nurse/types";
     }
+
     @GetMapping("/types/new")
     public String showTypeNewForm(Model model){
         List<Category> listCategories = categoryService.findAll();
@@ -248,5 +147,54 @@ public class NurseController {
     public String saveType(Type type){
         typeService.save(type);
         return "redirect:nurse/types";
+    }
+
+    @PostMapping("/history/save/{id}")
+    public String saveHistory(@PathVariable("id") Integer id, HistorySick historySick, HttpServletRequest request){
+        User user = userService.findUserById(id);
+
+        //getting from database execute of appointment
+        String[] historyId = request.getParameterValues("historyId");
+        boolean executeFromDB=false;
+        historySickService.executeAppointment(historyId, executeFromDB);
+
+        //getting test results from the form
+        String[] detailIDs = request.getParameterValues("detailID");
+        String[] detailNames = request.getParameterValues("detailName");
+        String[] detailValues = request.getParameterValues("detailValue");
+        historySickService.historySickAnalysisResults(historySick, detailIDs, detailNames, detailValues);
+
+        if (!historySick.getType().getName().contains("Operation")){
+
+            //setting who completed the appointment
+            User nurse = userService.findByUsername(request.getUserPrincipal().getName());
+            String nurseAppointment = "nurse "+nurse.getFirstName() + " "+ nurse.getLastName();
+            if (historySick.isExecute()!=executeFromDB){
+                historySick.setExecuteAppointment(nurseAppointment);
+            }
+
+            //save history sick
+            historySick.setUser(user);
+            user.addHistory(historySick);
+            historySickService.save(historySick);
+
+            //send email with analyzes
+            if (historySick.getType().getCategory().getName().equals("Analyzes")){
+                sendEmailService.sendEmail(user.getEmail(),
+                        user.getFirstName(),
+                        historySick.getType().getName(),
+                        historySick.getAnalysisResults(),
+                        "Test results");
+            }
+        }
+
+        return "redirect:/nurse/history/{id}";
+    }
+
+    @InitBinder
+    public void bindingPreparation(WebDataBinder binder) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        CustomDateEditor orderDateEditor = new CustomDateEditor(dateFormat, true);
+        binder.registerCustomEditor(Date.class, orderDateEditor);
     }
 }

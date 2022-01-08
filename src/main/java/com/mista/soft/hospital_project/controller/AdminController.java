@@ -30,11 +30,8 @@ public class AdminController {
     public String showEditUserFormAdmin(@PathVariable("id") Integer id, Model model){
 
         User user = userService.findUserById(id);
-
         Set<Role> listRoles = new HashSet<>();
-
         listRoles=user.getRoles();
-
         List<Role>roles= new ArrayList<>();
         Iterator<Role> iterator = listRoles.iterator();
         while (iterator.hasNext()) {

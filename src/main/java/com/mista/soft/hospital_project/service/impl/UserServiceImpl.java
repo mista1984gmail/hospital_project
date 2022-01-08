@@ -3,6 +3,9 @@ package com.mista.soft.hospital_project.service.impl;
 import com.mista.soft.hospital_project.model.entity.User;
 import com.mista.soft.hospital_project.model.repository.UserRepository;
 import com.mista.soft.hospital_project.service.UserService;
+
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,14 +14,12 @@ import org.springframework.stereotype.Service;
 import com.mista.soft.hospital_project.model.entity.Role;
 import org.thymeleaf.util.StringUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
+
     @Autowired
     UserRepository userRepository;
 
@@ -48,7 +49,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> allUsers() {
+        log.info("Find all users");
         return userRepository.findAll();
+    }
+
+    @Override
+    public List<User> allUsersWithRoleUser() {
+        List<User> users = userRepository.findAll();
+        List<User> patientsList = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            if(users.get(i).getAuthorities().toString().contains("ROLE_USER")) {
+                patientsList.add(users.get(i));
+            }
+        }
+        return patientsList;
     }
 
     @Override
@@ -83,25 +97,7 @@ public class UserServiceImpl implements UserService {
     public void update(User user) {
         user.setActive(true);
         user.setRoles(Collections.singleton(new Role(1, "ROLE_USER")));
-
         userRepository.save(user);
-
-    }
-
-    @Override
-    public void addUser(User user) {
-        user.setRoles(Collections.singleton(new Role(1, "ROLE_USER")));
-        user.setActivationCode(UUID.randomUUID().toString());
-        userRepository.save(user);
-        if(!StringUtils.isEmpty(user.getEmail())){
-            String message = String.format(
-                    "Hello, %s! \n" +
-                            "Welcome to Hospital. Please, visit next link:http://localhost:8080/activate/%s",
-                    user.getFirstName(),
-                    user.getActivationCode()
-            );
-            sendEmailService.send(user.getEmail(),"Activation code", message);
-        }
     }
 
     @Override
@@ -109,26 +105,12 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    @Override
-    public boolean deleteUser(Integer id) {
-        if (userRepository.findById(id).isPresent()) {
-            userRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
-    @Override
-    public List<User> findByLastName(String lastName) {
-        List<User>users=userRepository.findAll();
-        users.stream().filter(user -> user.getLastName().equals(lastName)).collect(Collectors.toList());
-        return users;
-    }
 
     @Override
     public boolean activateUser(String code) {

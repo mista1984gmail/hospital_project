@@ -1,6 +1,5 @@
 package com.mista.soft.hospital_project.service;
 
-import com.mista.soft.hospital_project.model.entity.Category;
 import com.mista.soft.hospital_project.model.entity.Type;
 
 import java.util.List;

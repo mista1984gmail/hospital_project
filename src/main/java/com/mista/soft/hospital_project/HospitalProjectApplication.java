@@ -8,6 +8,9 @@ public class HospitalProjectApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(HospitalProjectApplication.class, args);
+
+
+
     }
 
 }

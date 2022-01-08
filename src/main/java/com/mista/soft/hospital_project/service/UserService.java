@@ -15,20 +15,17 @@ public interface UserService extends UserDetailsService {
 
     List<User> allUsers();
 
+    List<User> allUsersWithRoleUser();
+
     boolean saveUser(User appUser);
 
     void update(User user);
 
     void updateAdmin(User user);
 
-    boolean deleteUser(Integer id);
-
     User findByUsername(String username);
-
-    List<User>findByLastName(String lastName);
 
     boolean activateUser(String code);
 
-    public void addUser(User user);
 
 }
