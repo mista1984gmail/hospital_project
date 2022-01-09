@@ -1,6 +1,7 @@
 package com.mista.soft.hospital_project.service.impl;
 
 import com.mista.soft.hospital_project.model.entity.AnalysisResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.util.List;
 
 @Service
+@Slf4j
 public class SendEmailService {
     @Autowired
     private JavaMailSender javaMailSender;
@@ -31,6 +33,7 @@ public class SendEmailService {
         simpleMailMessage.setText(body);
 
         javaMailSender.send(simpleMailMessage);
+        log.info("Email with test results has been sent to  " + to);
 
     }
 
@@ -54,7 +57,7 @@ public class SendEmailService {
         helper.addAttachment("invoice.pdf", file);
 
         javaMailSender.send(message);
-
+        log.info("Email with invoice has been sent to  " + to);
     }
 
     public void send(String to, String subject, String message){

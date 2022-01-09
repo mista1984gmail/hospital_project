@@ -4,6 +4,7 @@ import com.mista.soft.hospital_project.model.entity.HistorySick;
 import com.mista.soft.hospital_project.model.entity.User;
 import com.mista.soft.hospital_project.model.repository.HistorySickRepository;
 import com.mista.soft.hospital_project.service.HistorySickService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -11,7 +12,9 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 @Service
+@Slf4j
 public class HistorySickServiceImpl implements HistorySickService {
 
     private final HistorySickRepository historySickRepository;
@@ -22,21 +25,25 @@ public class HistorySickServiceImpl implements HistorySickService {
 
     @Override
     public List<HistorySick> findAll() {
+        log.info("Find all history sick");
         return historySickRepository.findAll();
     }
 
     @Override
     public HistorySick findById(Integer id) {
+        log.info("History by id: " + id + " found.");
         return historySickRepository.findById(id).get();
     }
 
     @Override
     public void save(HistorySick historySick) {
         historySickRepository.save(historySick);
+        log.info("History sick by ID: " + historySick.getId() +  " saved.");
     }
 
     @Override
     public void deleteById(Integer id) {
+        log.info("History by id: " + id + " deleted.");
         historySickRepository.deleteById(id);
     }
 
@@ -51,6 +58,7 @@ public class HistorySickServiceImpl implements HistorySickService {
                 listHistorySick.add(allListHistorySick.get(i));
             }
         }
+        log.info("Find all history sick by date: " + dateFromForm);
         return listHistorySick;
     }
 
@@ -64,7 +72,6 @@ public class HistorySickServiceImpl implements HistorySickService {
 
     @Override
     public void historySickAnalysisResults(HistorySick historySick, String[] detailIDs, String[] detailNames, String[] detailValues) {
-
         for(int i = 0; i < detailNames.length; i++){
             if(detailIDs != null && detailIDs.length > 0){
                 historySick.setAnalysisResults(Integer.valueOf(detailIDs[i]), detailNames[i], detailValues[i]);
