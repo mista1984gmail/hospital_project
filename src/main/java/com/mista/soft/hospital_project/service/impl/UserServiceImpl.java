@@ -76,7 +76,8 @@ public class UserServiceImpl implements UserService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(false);
         userRepository.save(user);
-        log.info("User " + user.getFirstName() +", " + user.getLastName() + " (" + user.getId() + ")" +  " saved.");
+        log.info("User " + user.getFirstName() +", " + user.getLastName() + " (" + user.getId() + ")"
+                +  " saved.");
 
         if(!StringUtils.isEmpty(user.getEmail())){
             String message = String.format(
@@ -86,7 +87,8 @@ public class UserServiceImpl implements UserService {
                     user.getActivationCode()
             );
             sendEmailService.send(user.getEmail(),"Activation code", message);
-            log.info("User " + user.getFirstName() +", " + user.getLastName() + " (" + user.getId() + ")" +  " an activation code has been sent.");
+            log.info("User " + user.getFirstName() +", " + user.getLastName()
+                    + " (" + user.getId() + ")" +  " an activation code has been sent.");
         }
         return true;
     }
@@ -96,13 +98,15 @@ public class UserServiceImpl implements UserService {
         user.setActive(true);
         user.setRoles(Collections.singleton(new Role(1, "ROLE_USER")));
         userRepository.save(user);
-        log.info("User " + user.getFirstName() +", " + user.getLastName() + " (" + user.getId() + ")" +  " updated.");
+        log.info("User " + user.getFirstName() +", " + user.getLastName()
+                + " (" + user.getId() + ")" +  " updated.");
     }
 
     @Override
     public void updateAdmin(User user) {
         userRepository.save(user);
-        log.info("User " + user.getFirstName() +", " + user.getLastName() + " (" + user.getId() + ")" +  " updated.");
+        log.info("User " + user.getFirstName() +", " + user.getLastName()
+                + " (" + user.getId() + ")" +  " updated.");
     }
 
 
@@ -122,7 +126,8 @@ public class UserServiceImpl implements UserService {
         user.setActivationCode(null);
         user.setActive(true);
         userRepository.save(user);
-        log.info("User " + user.getFirstName() +", " + user.getLastName() + " (" + user.getId() + ")" + " activated.");
+        log.info("User " + user.getFirstName() +", " + user.getLastName()
+                + " (" + user.getId() + ")" + " activated.");
         return true;
     }
 }

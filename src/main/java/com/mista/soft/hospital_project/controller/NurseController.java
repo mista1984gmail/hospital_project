@@ -146,7 +146,7 @@ public class NurseController {
     @PostMapping("/types/save")
     public String saveType(Type type){
         typeService.save(type);
-        return "redirect:nurse/types";
+        return "redirect:/nurse/types";
     }
 
     @PostMapping("/history/save/{id}")
