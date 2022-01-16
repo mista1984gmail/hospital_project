@@ -50,13 +50,24 @@
     </div>
 
     <div class="col-md-12">
+
     <th:block  th:each="role: ${roles}">
 
         <input type = "hidden" name="detailID" th:value="${role.id}" />
         <div class="form-group row">
             <label class="col-form-label col-sm-1">Role </label>
             <div class="col-sm-4">
-                <input type="text" name="detailName" th:value="${role.name}" class="form-control" required />
+
+                <select type="text" name="detailName" th:value="${role.name}" class="form-control" required>
+                    <th:block th:unless="${role.name.equals(typ.name)}" th:each="typ : ${roleType}">
+                        <option type="text" th:text="${typ.name}" th:value="${typ.name}"/>
+                    </th:block>
+                    <th:block th:if="${role.name.equals(typ.name)}" th:each="typ : ${roleType}">
+                         <option type="text" th:text="${typ.name}" th:value="${typ.name}" selected/>
+                    </th:block>
+
+                </select>
+
             </div>
         </div>
 

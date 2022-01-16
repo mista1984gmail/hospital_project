@@ -1,5 +1,9 @@
 package com.mista.soft.hospital_project.service.impl;
 
+import com.mista.soft.hospital_project.exceptions.IdIsNotFoundOnDbException;
+import com.mista.soft.hospital_project.exceptions.UserNameNotFoundException;
+import com.mista.soft.hospital_project.exceptions.UserNotSavedException;
+import com.mista.soft.hospital_project.exceptions.UserNotUpdatedException;
 import com.mista.soft.hospital_project.model.entity.User;
 import com.mista.soft.hospital_project.model.repository.UserRepository;
 import com.mista.soft.hospital_project.service.UserService;
@@ -11,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.mista.soft.hospital_project.model.entity.Role;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
 import java.util.*;
@@ -32,16 +37,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-        log.info("User "+ username + " found.");
         if (user == null) {
-            throw new UsernameNotFoundException("User not found");
+            throw new UserNameNotFoundException();
         }
+        log.info("User "+ username + " found.");
         return user;
     }
 
     @Override
     public User findUserById(Integer id) {
         Optional<User> userFromDb = userRepository.findById(id);
+        if(userFromDb==null){
+            throw new IdIsNotFoundOnDbException(id);
+        }
         log.info("User by id: " + id + " found.");
         return userFromDb.orElse(new User());
     }
@@ -66,16 +74,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean saveUser(User user) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
         if (userFromDB != null) {
+            log.info("User " + user.getFirstName() +", " + user.getLastName() + " (" + user.getId() + ")"
+                    +  " is exists.");
             return false;
         }
         user.setRoles(Collections.singleton(new Role(1, "ROLE_USER")));
         user.setActivationCode(UUID.randomUUID().toString());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(false);
-        userRepository.save(user);
+        try{
+            userRepository.save(user);}
+        catch (UserNotSavedException e){
+            e.getMessage();
+        }
         log.info("User " + user.getFirstName() +", " + user.getLastName() + " (" + user.getId() + ")"
                 +  " saved.");
 
@@ -94,17 +109,49 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void update(User user) {
         user.setActive(true);
         user.setRoles(Collections.singleton(new Role(1, "ROLE_USER")));
-        userRepository.save(user);
+        try{
+            userRepository.save(user);}
+        catch (UserNotUpdatedException e){
+            e.getMessage();
+        }
+
         log.info("User " + user.getFirstName() +", " + user.getLastName()
                 + " (" + user.getId() + ")" +  " updated.");
     }
 
     @Override
-    public void updateAdmin(User user) {
-        userRepository.save(user);
+    @Transactional
+    public void updateAdmin(User user, String[] detailIDs, String[] detailNames) {
+
+        for(int i = 0; i < detailNames.length; i++){
+            if(detailIDs != null && detailIDs.length > 0){
+                String role = detailNames[i];
+                switch (role){
+                    case "ROLE_USER":
+                        user.setRoles(Collections.singleton(new Role(1, detailNames[i])));
+                        break;
+                    case "ROLE_ADMIN":
+                        user.setRoles(Collections.singleton(new Role(2, detailNames[i])));
+                        break;
+                    case "ROLE_DOCTOR":
+                        user.setRoles(Collections.singleton(new Role(3, detailNames[i])));
+                        break;
+                    case "ROLE_NURSE":
+                        user.setRoles(Collections.singleton(new Role(4, detailNames[i])));
+                        break;
+                }
+            }
+
+        }
+        try{
+            userRepository.save(user);}
+        catch (UserNotSavedException e){
+            e.getMessage();
+        }
         log.info("User " + user.getFirstName() +", " + user.getLastName()
                 + " (" + user.getId() + ")" +  " updated.");
     }
@@ -112,8 +159,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UserNameNotFoundException();
+        }
         log.info("User "+ username +  " found.");
-        return userRepository.findByUsername(username);
+        return user;
     }
 
 
@@ -125,7 +176,11 @@ public class UserServiceImpl implements UserService {
         }
         user.setActivationCode(null);
         user.setActive(true);
-        userRepository.save(user);
+        try{
+            userRepository.save(user);}
+        catch (UserNotSavedException e){
+            e.getMessage();
+        }
         log.info("User " + user.getFirstName() +", " + user.getLastName()
                 + " (" + user.getId() + ")" + " activated.");
         return true;

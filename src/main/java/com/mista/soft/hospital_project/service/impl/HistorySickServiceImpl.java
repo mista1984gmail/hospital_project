@@ -6,6 +6,7 @@ import com.mista.soft.hospital_project.model.repository.HistorySickRepository;
 import com.mista.soft.hospital_project.service.HistorySickService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -36,6 +37,7 @@ public class HistorySickServiceImpl implements HistorySickService {
     }
 
     @Override
+    @Transactional
     public void save(HistorySick historySick) {
         historySickRepository.save(historySick);
         log.info("History sick by ID: " + historySick.getId() +  " saved.");

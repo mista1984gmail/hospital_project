@@ -6,6 +6,7 @@ import com.mista.soft.hospital_project.service.TypeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Service
@@ -31,6 +32,7 @@ public class TypeServiceImpl implements TypeService {
     }
 
     @Override
+    @Transactional
     public void save(Type type) {
         typeRepository.save(type);
         log.info("Type " + type.getName() + " (" + type.getId() + ")" +  " saved.");

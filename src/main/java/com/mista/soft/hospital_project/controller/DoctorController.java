@@ -24,6 +24,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/doctor")
 public class DoctorController {
+
     @Autowired
     HistorySickServiceImpl historySickService;
     @Autowired

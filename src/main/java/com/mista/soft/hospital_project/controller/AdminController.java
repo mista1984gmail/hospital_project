@@ -1,6 +1,7 @@
 package com.mista.soft.hospital_project.controller;
 
 import com.mista.soft.hospital_project.model.entity.User;
+import com.mista.soft.hospital_project.service.impl.RoleServiceImpl;
 import com.mista.soft.hospital_project.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,8 @@ import java.util.*;
 public class AdminController {
     @Autowired
     UserServiceImpl userService;
+    @Autowired
+    RoleServiceImpl roleService;
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String adminPage(Model model) {
@@ -30,17 +33,12 @@ public class AdminController {
     public String showEditUserFormAdmin(@PathVariable("id") Integer id, Model model){
 
         User user = userService.findUserById(id);
-        Set<Role> listRoles = new HashSet<>();
-        listRoles=user.getRoles();
-        List<Role>roles= new ArrayList<>();
-        Iterator<Role> iterator = listRoles.iterator();
-        while (iterator.hasNext()) {
-            Role role = iterator.next();
-            roles.add(role);
-        }
+        List<Role>roles= roleService.rolesUserToList(user);
+        List<Role>roleType= roleService.allRoles();
 
         model.addAttribute("user", user);
         model.addAttribute("roles", roles);
+        model.addAttribute("roleType", roleType);
         return "admin/admin_user_form";
     }
 
@@ -49,29 +47,8 @@ public class AdminController {
 
         String[] detailIDs = request.getParameterValues("detailID");
         String[] detailNames = request.getParameterValues("detailName");
+        userService.updateAdmin(user, detailIDs, detailNames);
 
-        for(int i = 0; i < detailNames.length; i++){
-            if(detailIDs != null && detailIDs.length > 0){
-                String role = detailNames[i];
-                switch (role){
-                    case "ROLE_USER":
-                        user.setRoles(Collections.singleton(new Role(1, detailNames[i])));
-                        break;
-                    case "ROLE_ADMIN":
-                        user.setRoles(Collections.singleton(new Role(2, detailNames[i])));
-                        break;
-                    case "ROLE_DOCTOR":
-                        user.setRoles(Collections.singleton(new Role(3, detailNames[i])));
-                        break;
-                    case "ROLE_NURSE":
-                        user.setRoles(Collections.singleton(new Role(4, detailNames[i])));
-                        break;
-                }
-            }
-
-        }
-
-        userService.updateAdmin(user);
         return "redirect:/admin/admin";
     }
 
