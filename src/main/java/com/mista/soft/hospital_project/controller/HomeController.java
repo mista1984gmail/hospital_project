@@ -2,6 +2,8 @@ package com.mista.soft.hospital_project.controller;
 
 import com.mista.soft.hospital_project.model.entity.Type;
 import com.mista.soft.hospital_project.model.entity.User;
+import com.mista.soft.hospital_project.service.TypeService;
+import com.mista.soft.hospital_project.service.UserService;
 import com.mista.soft.hospital_project.service.impl.TypeServiceImpl;
 import com.mista.soft.hospital_project.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +21,12 @@ import java.util.List;
 
 @Controller
 public class HomeController {
-
-    private final UserServiceImpl userService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
-    private TypeServiceImpl typeService;
+    private TypeService typeService;
 
-    @Autowired
-    public HomeController(UserServiceImpl userService) {
-        this.userService = userService;
-    }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage(Model model) {

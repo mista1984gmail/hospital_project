@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
         try{
             userRepository.save(user);}
         catch (UserNotSavedException e){
-            e.getMessage();
+            log.info(e.getMessage());
         }
         log.info("User " + user.getFirstName() +", " + user.getLastName() + " (" + user.getId() + ")"
                 +  " saved.");
@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
         try{
             userRepository.save(user);}
         catch (UserNotUpdatedException e){
-            e.getMessage();
+            log.info(e.getMessage());
         }
 
         log.info("User " + user.getFirstName() +", " + user.getLastName()
@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
         try{
             userRepository.save(user);}
         catch (UserNotSavedException e){
-            e.getMessage();
+            log.info(e.getMessage());
         }
         log.info("User " + user.getFirstName() +", " + user.getLastName()
                 + " (" + user.getId() + ")" +  " updated.");
@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
         try{
             userRepository.save(user);}
         catch (UserNotSavedException e){
-            e.getMessage();
+            log.info(e.getMessage());
         }
         log.info("User " + user.getFirstName() +", " + user.getLastName()
                 + " (" + user.getId() + ")" + " activated.");

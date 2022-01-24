@@ -1,6 +1,8 @@
 package com.mista.soft.hospital_project.controller;
 
 import com.mista.soft.hospital_project.model.entity.User;
+import com.mista.soft.hospital_project.service.RoleService;
+import com.mista.soft.hospital_project.service.UserService;
 import com.mista.soft.hospital_project.service.impl.RoleServiceImpl;
 import com.mista.soft.hospital_project.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +20,9 @@ import java.util.*;
 @RequestMapping("/admin")
 public class AdminController {
     @Autowired
-    UserServiceImpl userService;
+    private UserService userService;
     @Autowired
-    RoleServiceImpl roleService;
+    private RoleService roleService;
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String adminPage(Model model) {

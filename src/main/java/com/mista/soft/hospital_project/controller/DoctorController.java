@@ -3,9 +3,9 @@ package com.mista.soft.hospital_project.controller;
 import com.mista.soft.hospital_project.model.entity.HistorySick;
 import com.mista.soft.hospital_project.model.entity.Type;
 import com.mista.soft.hospital_project.model.entity.User;
-import com.mista.soft.hospital_project.service.impl.HistorySickServiceImpl;
-import com.mista.soft.hospital_project.service.impl.TypeServiceImpl;
-import com.mista.soft.hospital_project.service.impl.UserServiceImpl;
+import com.mista.soft.hospital_project.service.HistorySickService;
+import com.mista.soft.hospital_project.service.TypeService;
+import com.mista.soft.hospital_project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -26,11 +26,11 @@ import java.util.List;
 public class DoctorController {
 
     @Autowired
-    HistorySickServiceImpl historySickService;
+    private HistorySickService historySickService;
     @Autowired
-    UserServiceImpl userService;
+    private UserService userService;
     @Autowired
-    TypeServiceImpl typeService;
+    private TypeService typeService;
 
     @RequestMapping(value = "/doctor", method = RequestMethod.GET)
     public String doctorPage(Model model) {

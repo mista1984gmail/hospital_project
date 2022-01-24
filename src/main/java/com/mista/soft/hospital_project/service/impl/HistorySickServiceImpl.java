@@ -5,6 +5,7 @@ import com.mista.soft.hospital_project.model.entity.User;
 import com.mista.soft.hospital_project.model.repository.HistorySickRepository;
 import com.mista.soft.hospital_project.service.HistorySickService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,7 @@ import java.util.List;
 public class HistorySickServiceImpl implements HistorySickService {
 
     private final HistorySickRepository historySickRepository;
-
+    @Autowired
     public HistorySickServiceImpl(HistorySickRepository historySickRepository) {
         this.historySickRepository = historySickRepository;
     }

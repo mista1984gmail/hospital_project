@@ -4,6 +4,10 @@ import com.mista.soft.hospital_project.model.entity.Category;
 import com.mista.soft.hospital_project.model.entity.HistorySick;
 import com.mista.soft.hospital_project.model.entity.Type;
 import com.mista.soft.hospital_project.model.entity.User;
+import com.mista.soft.hospital_project.service.CategoryService;
+import com.mista.soft.hospital_project.service.HistorySickService;
+import com.mista.soft.hospital_project.service.TypeService;
+import com.mista.soft.hospital_project.service.UserService;
 import com.mista.soft.hospital_project.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -25,13 +29,13 @@ import java.util.List;
 @RequestMapping("/nurse")
 public class NurseController {
     @Autowired
-    private CategoryServiceImpl categoryService;
+    private CategoryService categoryService;
     @Autowired
-    private TypeServiceImpl typeService;
+    private TypeService typeService;
     @Autowired
-    UserServiceImpl userService;
+    private UserService userService;
     @Autowired
-    HistorySickServiceImpl historySickService;
+    private HistorySickService historySickService;
     @Autowired
     private SendEmailService sendEmailService;
 

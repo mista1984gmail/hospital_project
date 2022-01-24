@@ -1,7 +1,7 @@
 package com.mista.soft.hospital_project.controller;
 
 import com.mista.soft.hospital_project.model.entity.User;
-import com.mista.soft.hospital_project.service.impl.UserServiceImpl;
+import com.mista.soft.hospital_project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +17,7 @@ import javax.validation.Valid;
 public class RegistrationController {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @GetMapping("/registration")
     public String registration(Model model) {

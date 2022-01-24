@@ -2,7 +2,7 @@ package com.mista.soft.hospital_project.controller;
 
 import com.mista.soft.hospital_project.model.entity.HistorySick;
 import com.mista.soft.hospital_project.model.entity.User;
-import com.mista.soft.hospital_project.service.impl.UserServiceImpl;
+import com.mista.soft.hospital_project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    UserServiceImpl userService;
+    private UserService userService;
 
     @RequestMapping(value = "/history/{id}", method = RequestMethod.GET)
     public String userPage(@PathVariable("id") Integer id, Model model) {

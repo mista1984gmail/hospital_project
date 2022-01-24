@@ -1,5 +1,6 @@
 package com.mista.soft.hospital_project.config;
 
+import com.mista.soft.hospital_project.service.UserService;
 import com.mista.soft.hospital_project.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UserServiceImpl userService;
+    UserService userService;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
