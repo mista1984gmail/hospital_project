@@ -10,14 +10,14 @@
 <body class="bg-success p-2 text-dark bg-opacity-25">
 <th:block th:include="/nurse/_menu_nurse"></th:block>
 <div class="container text-center">
-    <div><h1>Full list of medical services</h1></div>
+    <div><h1 th:text="#{list_of_services}"></h1></div>
     <div>
         <table class="table table-bordered table-striped">
             <thead class="thead-dark">
             <tr>
                 <th>ID</th>
-                <th>Name</th>
-                <th>Price, $</th>
+                <th th:text="#{name_services}"></th>
+                <th th:text="#{price_in_table}"></th>
             </tr>
             </thead>
             <tbody>

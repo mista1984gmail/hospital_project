@@ -13,21 +13,21 @@
 <div th:switch="${patientsList}">
     <h2 th:case="null">No users found!</h2>
     <div th:case="*">
-        <div><h2 class="text-center">Patients</h2></div>
+        <div><h2 class="text-center" th:text="#{patients}"></h2></div>
 
         <input class="form-control" id="myInput" type="text" placeholder="Search..">
         <br>
         <table class="table table-bordered table-striped">
             <thead class="thead-dark">
             <tr>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Date of birthday</th>
-                <th>Age</th>
-                <th>Address</th>
+                <th th:text="#{first_name}"></th>
+                <th th:text="#{last_name}"></th>
+                <th th:text="#{birthday}"></th>
+                <th th:text="#{age}"></th>
+                <th th:text="#{address}"></th>
                 <th>email</th>
-                <th>Telephone</th>
-                <th>History sick</th>
+                <th th:text="#{telephone}"></th>
+                <th th:text="#{history_sick}"></th>
             </tr>
             </thead>
             <tbody id="myTable">
@@ -39,7 +39,7 @@
                 <td th:text="${patient.address}"></td>
                 <td th:text="${patient.email}"></td>
                 <td th:text="${patient.telephone}"></td>
-                <td><a th:href="@{/nurse/history/{id}(id=${patient.id})}">History sick</a></td>
+                <td><a th:href="@{/nurse/history/{id}(id=${patient.id})}" th:text="#{history_sick}"></a></td>
             </tr>
             </tbody>
         </table>

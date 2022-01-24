@@ -7,18 +7,17 @@
 </head>
 <body>
 <div style="border: 1px solid #ccc;padding:5px;margin-bottom:20px;background-color: #b4dcfa">
-    <a class="text-white" th:href="@{/}">Home</a>
+    <a class="text-white" th:href="@{/}" th:text="#{up}"></a>
     | &nbsp;
 </div>
 <div class="container text-center">
-    <div><h1>Full list of medical services</h1></div>
+    <div><h1 th:text="#{full_services}"></h1></div>
     <div>
         <table class="table table-striped">
             <thead >
             <tr>
-
-                <th>Name of services</th>
-                <th>Price, $</th>
+                <th th:text="#{name_services}"></th>
+                <th th:text="#{price_in_table}"></th>
             </tr>
             </thead>
             <tbody>

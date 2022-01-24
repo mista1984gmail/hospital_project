@@ -1,4 +1,4 @@
-create table hospital_test4.user
+create table hospital_test5.user
 (
     id              bigint primary key auto_increment,
     first_name      varchar(255) not null,
@@ -7,17 +7,17 @@ create table hospital_test4.user
     address			varchar(255) not null,
     email			varchar(255) not null,
     telephone		varchar(255) not null,
-    name_user			varchar(128) not null,
+    name_user		varchar(128) not null,
     password		varchar(128) not null
 );
 
-create table hospital_test4.role
+create table hospital_test5.role
 (
     id              bigint primary key auto_increment,
     name     		varchar(255) not null
 );
 
-create table hospital_test4.user_roles
+create table hospital_test5.user_roles
 (
     user_id         bigint,
     roles_id     	bigint,
@@ -26,17 +26,17 @@ create table hospital_test4.user_roles
     CONSTRAINT fk_role FOREIGN KEY (roles_id)
         REFERENCES role(id)
 );
-INSERT INTO `hospital_test4`.`role` (`name`) VALUES ('ROLE_USER');
-INSERT INTO `hospital_test4`.`role` (`name`) VALUES ('ROLE_ADMIN');
-INSERT INTO `hospital_test4`.`role` (`name`) VALUES ('ROLE_DOCTOR');
-INSERT INTO `hospital_test4`.`role` (`name`) VALUES ('ROLE_NURSE');
+INSERT INTO `hospital_test5`.`role` (`name`) VALUES ('ROLE_USER');
+INSERT INTO `hospital_test5`.`role` (`name`) VALUES ('ROLE_ADMIN');
+INSERT INTO `hospital_test5`.`role` (`name`) VALUES ('ROLE_DOCTOR');
+INSERT INTO `hospital_test5`.`role` (`name`) VALUES ('ROLE_NURSE');
 
-create table hospital_test4.category
+create table hospital_test5.category
 (
     id        bigint primary key auto_increment,
     name      varchar(255) not null
 );
-create table hospital_test4.type
+create table hospital_test5.type
 (
     id        bigint primary key auto_increment,
     name      varchar(255) not null,
@@ -44,7 +44,7 @@ create table hospital_test4.type
     CONSTRAINT fk_category FOREIGN KEY (category_id)
         REFERENCES category(id)
 );
-create table hospital_test4.history_sick
+create table hospital_test5.history_sick
 (
     id             bigint primary key auto_increment,
     diagnosis      varchar(255),
@@ -58,7 +58,7 @@ create table hospital_test4.history_sick
         REFERENCES user(id)
 );
 
-create table hospital_test4.analysis_result
+create table hospital_test5.analysis_result
 (
     id        bigint primary key auto_increment,
     name      varchar(255),
@@ -67,9 +67,9 @@ create table hospital_test4.analysis_result
     CONSTRAINT fk_history_sick FOREIGN KEY (history_sick_id)
         REFERENCES history_sick(id)
 );
-ALTER TABLE hospital_test4.type ADD price double;
-ALTER TABLE hospital_test4.history_sick ADD  appointment varchar(256);
-alter table hospital_test4.user  add column active bool;
-ALTER TABLE hospital_test4.user ADD  activation_code varchar(256);
-ALTER TABLE hospital_test4.history_sick ADD  execute_appointment varchar(256);
-alter table hospital_test4.history_sick  add column execute bool;
+ALTER TABLE hospital_test5.type ADD price double;
+ALTER TABLE hospital_test5.history_sick ADD  appointment varchar(256);
+alter table hospital_test5.user  add column active bool;
+ALTER TABLE hospital_test5.user ADD  activation_code varchar(256);
+ALTER TABLE hospital_test5.history_sick ADD  execute_appointment varchar(256);
+alter table hospital_test5.history_sick  add column execute bool;

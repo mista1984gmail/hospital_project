@@ -1,19 +1,19 @@
 <div xmlns:th="http://www.thymeleaf.org">
 <nav class="navbar navbar-dark bg-primary">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/nurse/nurse}">NURSE APP</a>
+        <a class="navbar-brand" th:href="@{/nurse/nurse}" th:text="#{nurse_app}">NURSE APP</a>
         <div class="btn-group dropstart">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="navbar-toggler-icon"></span>
             </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-            <li><a class="dropdown-item"  th:href="@{/nurse/categories}">List of medical services by category</a></li>
-            <li><a class="dropdown-item"  th:href="@{/nurse/category/new}">Create a medical category</a></li>
-            <li><a class="dropdown-item"  th:href="@{/nurse/types}">Full list of medical services</a></li>
-            <li><a class="dropdown-item"  th:href="@{/nurse/types/new}">Create a medical service</a></li>
-            <li><a class="dropdown-item"  th:href="@{/nurse/nurse}">List of patients</a></li>
+            <li><a class="dropdown-item"  th:href="@{/nurse/categories}" th:text="#{list_services}"></a></li>
+            <li><a class="dropdown-item"  th:href="@{/nurse/category/new}" th:text="#{create_category}"></a></li>
+            <li><a class="dropdown-item"  th:href="@{/nurse/types}" th:text="#{list_of_services}"></a></li>
+            <li><a class="dropdown-item"  th:href="@{/nurse/types/new}" th:text="#{create_service}"></a></li>
+            <li><a class="dropdown-item"  th:href="@{/nurse/nurse}" th:text="#{list_patients}"></a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" th:if="${#request.userPrincipal != null}" th:href="@{/logout}">Logout</a></li>
+            <li><a class="dropdown-item" th:if="${#request.userPrincipal != null}" th:href="@{/logout}" th:text="#{logout}"></a></li>
         </ul>
         </div>
     </div>

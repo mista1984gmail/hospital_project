@@ -10,14 +10,14 @@
 <body class="bg-success p-2 text-dark bg-opacity-25">
 <th:block th:include="/nurse/_menu_nurse"></th:block>
 <div class="container text-center">
-    <div><h1>Categories of medical services</h1></div>
+    <div><h1 th:text="#{categories_services}"></h1></div>
     <div>
         <table class="table table-bordered table-striped">
             <thead class="thead-dark">
             <tr>
                 <th>ID</th>
-                <th>Categories of medical services</th>
-                <th>Medical services</th>
+                <th th:text="#{categories_services}"></th>
+                <th th:text="#{medical_services}"></th>
                 <th></th>
             </tr>
             </thead>
@@ -28,7 +28,7 @@
                     <td>[[${category.name}]]</td>
                     <td>[[${category.types}]]</td>
                     <td>
-                    <a th:href="@{'/nurse/categories/edit/'+${category.id}}">Edit</a>
+                    <a th:href="@{'/nurse/categories/edit/'+${category.id}}" th:text="#{edit}">Edit</a>
                     </td>
                 </tr>
             </th:block>

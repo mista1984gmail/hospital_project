@@ -12,17 +12,17 @@
 <body class="bg-success p-2 text-dark bg-opacity-25">
 <th:block th:include="/nurse/_menu_nurse"></th:block>
 <div class="container text-center">
-    <div><h1>Patient info</h1></div>
+    <div><h1 th:text="#{patient_info}"></h1></div>
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">
         <tr>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Date of birthday</th>
-            <th>Age</th>
-            <th>Address</th>
+            <th th:text="#{first_name}"></th>
+            <th th:text="#{last_name}"></th>
+            <th th:text="#{birthday}"></th>
+            <th th:text="#{age}"></th>
+            <th th:text="#{address}"></th>
             <th>email</th>
-            <th>Telephone</th>
+            <th th:text="#{telephone}"></th>
         </tr>
         </thead>
         <tbody>
@@ -36,11 +36,11 @@
         </tr>
         </tbody>
     </table>
-    <div><h1>History sick</h1></div>
+    <div><h1 th:text="#{history_sick}"></h1></div>
 
     <form method="POST" th:action="@{'/nurse/history/getAllOnDate/'+${user.id}}">
         <table>
-            <td><label for="dateFromForm">Date</label></td>
+            <td><label for="dateFromForm" th:text="#{date}"></label></td>
             <td><input type="date" id="dateFromForm" name="dateFromForm" th:value="*{dateFromForm}"/></td>
             <input type="submit" value="View all on date"/>
         </table>
@@ -51,20 +51,20 @@
         <table class="table table-bordered table-striped">
             <thead class="thead-dark">
             <tr>
-                <th>Name of services</th>
-                <th>Date</th>
-                <th>Results of analysis</th>
-                <th>Diagnosis/Detail</th>
-                <th>Appointment</th>
-                <th>Execute</th>
-                <th>Execute appointment</th>
-                <th>Cost</th>
+                <th th:text="#{name_services}"></th>
+                <th th:text="#{date}"></th>
+                <th th:text="#{results_analysis}"></th>
+                <th th:text="#{diagnosis_detail}"></th>
+                <th th:text="#{appointment}"></th>
+                <th th:text="#{execute}"></th>
+                <th th:text="#{execute_appointment}"></th>
+                <th th:text="#{cost}"></th>
                 <th></th>
             </tr>
             </thead>
             <tfoot>
             <tr>
-                <td colspan="7"><b>Total</b></td>
+                <td colspan="7"><b th:text="#{total}"></b></td>
                 <td id="granted" style="font-weight: bold;"></td>
             </tr>
             </tfoot>
@@ -80,7 +80,7 @@
                     <td>[[${history.executeAppointment}]]</td>
                     <td name="price">[[${history.type.price}]]</td>
                     <td>
-                        <a th:href="@{'/nurse/history/'+${user.id}+'/edit/'+${history.id}}">Edit</a>
+                        <a th:href="@{'/nurse/history/'+${user.id}+'/edit/'+${history.id}}" th:text="#{edit}"></a>
                     </td>
                 </tr>
             </th:block>
@@ -88,7 +88,7 @@
         </table>
     </div>
     <div class="p-2">
-    <a class="btn btn-primary" th:href="@{'/nurse/invoice/'+${user.id}+'/'+${dateFromForm}}">Create invoice</a>
+    <a class="btn btn-primary" th:href="@{'/nurse/invoice/'+${user.id}+'/'+${dateFromForm}}" th:text="#{create_invoice}"></a>
     </div>
 </div>
 <script src="../../static/script/total.js" th:src="@{/script/total.js}"></script>

@@ -8,15 +8,15 @@
 <div
         style="border: 1px solid #ccc;padding:5px;margin-bottom:20px;">
 
-    <a th:href="@{/}">Home</a>
+    <a th:href="@{/}" th:text="#{up}"></a>
 
     | &nbsp;
 
-    <a th:href="@{/logout}">Logout</a>
+    <a th:href="@{/logout}" th:text="#{logout}"></a>
 
 </div>
 
-<h3 style="color: red;">You do not have permission to access this page!</h3>
+<h3 style="color: red;" th:text="#{messages_403}">You do not have permission to access this page!</h3>
 
 
 

@@ -31,19 +31,19 @@
         <div style="color:red" class="alert alert-warning" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name Error</div>
     </div>
     <div class="col-4">
-        <label for="firstName" class="form-label">First name</label>
+        <label for="firstName" class="form-label" th:text="#{first_name}"></label>
         <input type="text" class="form-control" th:field="*{firstName}" id="firstName" placeholder="First Name">
     </div>
     <div class="col-4">
-        <label for="lastName" class="form-label">Last name</label>
+        <label for="lastName" class="form-label" th:text="#{last_name}"></label>
         <input type="text" class="form-control" th:field="*{lastName}" id="lastName" placeholder="Last Name">
     </div>
     <div class="col-4">
-        <label for="birthday" class="form-label">Birthday</label>
+        <label for="birthday" class="form-label" th:text="#{birthday}"></label>
         <input type="date" class="form-control" th:field="*{birthday}" id="birthday" placeholder="Birthday">
     </div>
     <div class="col-md-12">
-        <label for="address" class="form-label">Address</label>
+        <label for="address" class="form-label" th:text="#{address}"></label>
         <input type="text" class="form-control" th:field="*{address}" id="address" placeholder="Address">
     </div>
     <div class="col-md-6">
@@ -52,12 +52,12 @@
         <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name Error</div>
     </div>
     <div class="col-md-6">
-        <label for="telephone" class="form-label">Telephone</label>
+        <label for="telephone" class="form-label" th:text="#{telephone}"></label>
         <input type="text" class="form-control" th:field="*{telephone}" id="telephone" placeholder="Telephone">
     </div>
 
     <div class="col-12">
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary" th:text="#{save}"></button>
     </div>
 </form>
 
