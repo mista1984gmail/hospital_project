@@ -12,7 +12,7 @@
 <br>
 <div class="error" th:if="${#request.userPrincipal.getName()!=user.username}">
     <script>
-        document.location.href = "/403";
+        document.location.href = "/limited_access";
     </script>
 </div>
 

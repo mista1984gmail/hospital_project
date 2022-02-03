@@ -25,6 +25,7 @@ public class AdminController {
     private RoleService roleService;
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
+
     public String adminPage(Model model) {
         List<User> usersList = userService.allUsers();
         model.addAttribute("usersList", usersList);

@@ -4,8 +4,6 @@ import com.mista.soft.hospital_project.model.entity.Type;
 import com.mista.soft.hospital_project.model.entity.User;
 import com.mista.soft.hospital_project.service.TypeService;
 import com.mista.soft.hospital_project.service.UserService;
-import com.mista.soft.hospital_project.service.impl.TypeServiceImpl;
-import com.mista.soft.hospital_project.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -29,7 +27,7 @@ public class HomeController {
 
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String loginPage(Model model) {
+    public String loginPage() {
         return "login";
     }
 
@@ -55,7 +53,7 @@ public class HomeController {
             }
         }
         else {
-            response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "404"));
+            response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/404"));
         }
 
     }
@@ -67,9 +65,9 @@ public class HomeController {
         return "price";
     }
 
-    @RequestMapping(value = "/403", method = RequestMethod.GET)
+    @RequestMapping(value = "/limited_access", method = RequestMethod.GET)
     public String accessDenied() {
-        return "403";
+        return "limited_access";
     }
 
     @RequestMapping(value = "/404", method = RequestMethod.GET)

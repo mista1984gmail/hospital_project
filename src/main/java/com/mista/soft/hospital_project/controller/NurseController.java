@@ -1,5 +1,6 @@
 package com.mista.soft.hospital_project.controller;
 
+import com.mista.soft.hospital_project.exceptions.IdIsNotFoundOnDbException;
 import com.mista.soft.hospital_project.model.entity.Category;
 import com.mista.soft.hospital_project.model.entity.HistorySick;
 import com.mista.soft.hospital_project.model.entity.Type;
@@ -141,8 +142,7 @@ public class NurseController {
     @GetMapping("/types/new")
     public String showTypeNewForm(Model model){
         List<Category> listCategories = categoryService.findAll();
-        model.addAttribute("listCategories", listCategories);
-        model.addAttribute("type", new Type());
+        model.addAttribute("listCategories", listCategories);model.addAttribute("type", new Type());
 
         return "nurse/type_form";
     }
@@ -155,6 +155,7 @@ public class NurseController {
 
     @PostMapping("/history/save/{id}")
     public String saveHistory(@PathVariable("id") Integer id, HistorySick historySick, HttpServletRequest request){
+
         User user = userService.findUserById(id);
 
         //getting from database execute of appointment
@@ -193,6 +194,11 @@ public class NurseController {
         }
 
         return "redirect:/nurse/history/{id}";
+    }
+    @ExceptionHandler(value = IdIsNotFoundOnDbException.class)
+    public String exceptionHanderNull(Model model){
+        model.addAttribute("msg","Null Pointer exception has occured");
+        return "null_page";
     }
 
     @InitBinder

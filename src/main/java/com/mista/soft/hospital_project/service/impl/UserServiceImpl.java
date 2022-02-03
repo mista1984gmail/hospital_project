@@ -2,8 +2,6 @@ package com.mista.soft.hospital_project.service.impl;
 
 import com.mista.soft.hospital_project.exceptions.IdIsNotFoundOnDbException;
 import com.mista.soft.hospital_project.exceptions.UserNameNotFoundException;
-import com.mista.soft.hospital_project.exceptions.UserNotSavedException;
-import com.mista.soft.hospital_project.exceptions.UserNotUpdatedException;
 import com.mista.soft.hospital_project.model.entity.User;
 import com.mista.soft.hospital_project.model.repository.UserRepository;
 import com.mista.soft.hospital_project.service.UserService;
@@ -46,10 +44,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserById(Integer id) {
-        Optional<User> userFromDb = userRepository.findById(id);
+        Optional<User> userFromDb= userRepository.findById(id);
         if(userFromDb==null){
             throw new IdIsNotFoundOnDbException(id);
         }
+
         log.info("User by id: " + id + " found.");
         return userFromDb.orElse(new User());
     }
@@ -86,11 +85,8 @@ public class UserServiceImpl implements UserService {
         user.setActivationCode(UUID.randomUUID().toString());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(false);
-        try{
-            userRepository.save(user);}
-        catch (UserNotSavedException e){
-            log.info(e.getMessage());
-        }
+        userRepository.save(user);
+
         log.info("User " + user.getFirstName() +", " + user.getLastName() + " (" + user.getId() + ")"
                 +  " saved.");
 
@@ -113,12 +109,7 @@ public class UserServiceImpl implements UserService {
     public void update(User user) {
         user.setActive(true);
         user.setRoles(Collections.singleton(new Role(1, "ROLE_USER")));
-        try{
-            userRepository.save(user);}
-        catch (UserNotUpdatedException e){
-            log.info(e.getMessage());
-        }
-
+        userRepository.save(user);
         log.info("User " + user.getFirstName() +", " + user.getLastName()
                 + " (" + user.getId() + ")" +  " updated.");
     }
@@ -147,11 +138,8 @@ public class UserServiceImpl implements UserService {
             }
 
         }
-        try{
-            userRepository.save(user);}
-        catch (UserNotSavedException e){
-            log.info(e.getMessage());
-        }
+        userRepository.save(user);
+
         log.info("User " + user.getFirstName() +", " + user.getLastName()
                 + " (" + user.getId() + ")" +  " updated.");
     }
@@ -176,11 +164,8 @@ public class UserServiceImpl implements UserService {
         }
         user.setActivationCode(null);
         user.setActive(true);
-        try{
-            userRepository.save(user);}
-        catch (UserNotSavedException e){
-            log.info(e.getMessage());
-        }
+        userRepository.save(user);
+
         log.info("User " + user.getFirstName() +", " + user.getLastName()
                 + " (" + user.getId() + ")" + " activated.");
         return true;
